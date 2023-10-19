@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">JiraFamily</string>
+    <string name="img_for_loader">imgForLoader</string>
+    <string name="logo">Logo</string>
+    <string name="jira_family">Jira family</string>
+    <string name="text_for_basemant">Планируйте и отслеживайте задачи</string>
+</resources>
