@@ -12,9 +12,25 @@
         android:layout_width="417dp"
         android:layout_height="386dp"
         android:background="@drawable/basemant_border"
+        android:textAlignment="textEnd"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/LoginButton"
+        android:layout_width="256dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="24dp"
+        android:backgroundTint="@color/yellow"
+        android:text="@string/login"
+        android:textAlignment="gravity"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        app:cornerRadius="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/BasemantTextView" />
 
     <View
         android:id="@+id/header"
@@ -53,8 +69,8 @@
 
     <TextView
         android:id="@+id/BasemantTextView"
-        android:layout_width="296dp"
-        android:layout_height="72dp"
+        android:layout_width="248dp"
+        android:layout_height="101dp"
         android:layout_marginTop="32dp"
         android:fontFamily="@font/poppins_bold"
         android:gravity="center"
@@ -67,14 +83,31 @@
         app:layout_constraintTop_toTopOf="@+id/basemant" />
 
     <Button
-        android:id="@+id/LoginButton"
-        android:layout_width="228dp"
-        android:layout_height="62dp"
+        android:id="@+id/RegistrationButton"
+        android:layout_width="256dp"
+        android:layout_height="43dp"
         android:layout_marginTop="24dp"
-        android:text="Button"
-        android:textColor="#000000"
+        android:text="@string/registration"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:cornerRadius="10dp"
+        android:backgroundTint="@color/yellow"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/BasemantTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/LoginButton" />
+
+    <Button
+        android:id="@+id/TokenButton"
+        android:layout_width="256dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/input_token"
+        android:backgroundTint="@color/yellow"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        app:cornerRadius="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/RegistrationButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

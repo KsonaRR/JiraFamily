@@ -6,4 +6,5 @@
     </style>
 
     <style name="Theme.JiraFamily" parent="Base.Theme.JiraFamily" />
+
 </resources>

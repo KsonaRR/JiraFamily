@@ -4,4 +4,19 @@
     <string name="logo">Logo</string>
     <string name="jira_family">Jira family</string>
     <string name="text_for_basemant">Планируйте и отслеживайте задачи</string>
+    <string name="login">Вход</string>
+    <string name="registration">Регистрация</string>
+    <string name="input_token">Ввести токен</string>
+    <string name="Login_text">Вход</string>
+    <string name="input_email">Почта</string>
+    <string name="input_password">Пароль</string>
+    <string name="Login_button">Вход</string>
+    <string name="forgot_password_button">Забыли пароль?</string>
+    <string name="repeat_password_input">Повторите пароль</string>
+    <string name="Registration_logo">Регистрация</string>
+    <string name="registration_button">Зарегистрироваться</string>
+    <string name="input_name">Имя</string>
+    <string name="input_lastname">Фамилия</string>
+    <string name="button_next">Далее</string>
+    <string name="input_name_of_family">Название семьи</string>
 </resources>
