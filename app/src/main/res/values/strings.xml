@@ -19,4 +19,8 @@
     <string name="input_lastname">Фамилия</string>
     <string name="button_next">Далее</string>
     <string name="input_name_of_family">Название семьи</string>
+    <string name="show_family">Показать членов семьи</string>
+    <string name="complete_tasks">Количество выполненных задач</string>
+    <string name="edit_members">Редактировать участников</string>
+    <string name="exit_account">Выйти из аккаунта</string>
 </resources>
