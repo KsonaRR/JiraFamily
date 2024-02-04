@@ -1,5 +1,8 @@
+
+
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
+    id("com.google.gms.google-services")
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
 }
@@ -8,6 +11,9 @@ android {
     namespace = "com.example.jirafamily"
     compileSdk = 34
 
+    buildFeatures {
+        viewBinding = true
+    }
     defaultConfig {
         applicationId = "com.example.jirafamily"
         minSdk = 27
@@ -40,7 +46,13 @@ dependencies {
 
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
+    implementation ("com.github.bumptech.glide:glide:4.12.0")
     implementation(libs.material)
+    implementation(libs.play.services.fido)
+    implementation(libs.androidx.ui.graphics.android)
+    implementation(platform("com.google.firebase:firebase-bom:32.7.1"))
+    implementation("com.google.firebase:firebase-database")
+    implementation("com.google.firebase:firebase-auth")
     implementation(libs.constraintlayout)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)

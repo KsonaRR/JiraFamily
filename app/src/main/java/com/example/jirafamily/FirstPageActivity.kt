@@ -8,6 +8,8 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 
 class FirstPageActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,7 +48,7 @@ class FirstPageActivity : AppCompatActivity() {
         btnContinue.setOnClickListener {
             val enteredToken = editTextToken.text.toString()
 
-            // TODO: Добавьте обработку введенного токена
+            // TODO: Добавить обработку введенного токена
 
             dialog.dismiss()
         }

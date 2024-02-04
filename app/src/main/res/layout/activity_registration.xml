@@ -57,7 +57,7 @@
         app:layout_constraintTop_toBottomOf="@+id/header" />
 
     <Button
-        android:id="@+id/buttonNext"
+        android:id="@+id/logButton"
         android:layout_width="256sp"
         android:layout_height="42sp"
         android:layout_marginTop="116dp"
@@ -70,7 +70,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.509"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextInputLastName" />
+        app:layout_constraintTop_toBottomOf="@+id/repeatPasswordField" />
 
     <TextView
         android:id="@+id/textViewName"
@@ -80,7 +80,7 @@
         android:text="@string/input_password"
         android:textColor="@color/white"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/editTextTextInputName"
+        app:layout_constraintBottom_toTopOf="@+id/passwordField"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.228"
         app:layout_constraintStart_toStartOf="parent" />
@@ -93,13 +93,13 @@
         android:text="@string/input_email"
         android:textColor="@color/white"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/editTextText3"
+        app:layout_constraintBottom_toTopOf="@+id/emailField"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.223"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:id="@+id/editTextTextInputName"
+        android:id="@+id/passwordField"
         android:layout_width="256dp"
         android:layout_height="42dp"
         android:layout_marginTop="72dp"
@@ -109,10 +109,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText3" />
+        app:layout_constraintTop_toBottomOf="@+id/emailField" />
 
     <EditText
-        android:id="@+id/editTextText3"
+        android:id="@+id/emailField"
         android:layout_width="256dp"
         android:layout_height="42dp"
         android:layout_marginTop="52dp"
@@ -125,7 +125,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <EditText
-        android:id="@+id/editTextTextInputLastName"
+        android:id="@+id/repeatPasswordField"
         android:layout_width="256sp"
         android:layout_height="42sp"
         android:layout_marginTop="68dp"
@@ -135,7 +135,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextInputName" />
+        app:layout_constraintTop_toBottomOf="@+id/passwordField" />
 
     <TextView
         android:id="@+id/textViewLastName"
@@ -145,7 +145,7 @@
         android:text="@string/repeat_password_input"
         android:textColor="@color/white"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/editTextTextInputLastName"
+        app:layout_constraintBottom_toTopOf="@+id/repeatPasswordField"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.324"
         app:layout_constraintStart_toStartOf="parent" />

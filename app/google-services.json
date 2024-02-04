@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "499522947328",
+    "project_id": "jirafamily-38dd6",
+    "storage_bucket": "jirafamily-38dd6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:499522947328:android:9d40b7847d12479bbb0be5",
+        "android_client_info": {
+          "package_name": "com.example.jirafamily"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJdaIGq0SwHd_w16yRh7wvt2oYWKgnCOc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

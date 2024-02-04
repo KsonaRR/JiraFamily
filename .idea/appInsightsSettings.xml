@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.example.jirafamily" />
+                  <option name="mobileSdkAppId" value="1:499522947328:android:9d40b7847d12479bbb0be5" />
+                  <option name="projectId" value="jirafamily-38dd6" />
+                  <option name="projectNumber" value="499522947328" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

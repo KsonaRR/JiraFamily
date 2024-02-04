@@ -1,5 +1,6 @@
 [versions]
-agp = "8.3.0-alpha14"
+agp = "8.3.0-alpha06"
+blurview = "1.6.6"
 kotlin = "1.8.21"
 core-ktx = "1.10.1"
 junit = "4.13.2"
@@ -8,8 +9,11 @@ espresso-core = "3.5.1"
 appcompat = "1.6.1"
 material = "1.9.0"
 constraintlayout = "2.1.4"
+play-services-fido = "20.1.0"
+ui-graphics-android = "1.6.0"
 
 [libraries]
+blurview = { module = "com.wonderkiln:blurview", version.ref = "blurview" }
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
@@ -17,6 +21,8 @@ espresso-core = { group = "androidx.test.espresso", name = "espresso-core", vers
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+play-services-fido = { group = "com.google.android.gms", name = "play-services-fido", version.ref = "play-services-fido" }
+androidx-ui-graphics-android = { group = "androidx.compose.ui", name = "ui-graphics-android", version.ref = "ui-graphics-android" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

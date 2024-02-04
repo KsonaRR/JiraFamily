@@ -8,7 +8,7 @@
     tools:context=".FillingDataSecond">
 
     <Button
-        android:id="@+id/buttonNext"
+        android:id="@+id/logButton"
         android:layout_width="256sp"
         android:layout_height="42sp"
         android:layout_marginTop="162dp"
@@ -21,10 +21,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.509"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextInputLastName" />
+        app:layout_constraintTop_toBottomOf="@+id/repeatPasswordField" />
 
     <EditText
-        android:id="@+id/editTextTextInputName"
+        android:id="@+id/passwordField"
         android:layout_width="256dp"
         android:layout_height="42dp"
         android:background="@drawable/rounded_inputtext"
@@ -43,13 +43,13 @@
         android:text="@string/input_name"
         android:textColor="@color/white"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/editTextTextInputName"
+        app:layout_constraintBottom_toTopOf="@+id/passwordField"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.229"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:id="@+id/editTextTextInputLastName"
+        android:id="@+id/repeatPasswordField"
         android:layout_width="256sp"
         android:layout_height="42sp"
         android:layout_marginTop="68dp"
@@ -59,7 +59,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextInputName" />
+        app:layout_constraintTop_toBottomOf="@+id/passwordField" />
 
     <TextView
         android:id="@+id/textViewLastName"
@@ -69,13 +69,13 @@
         android:text="@string/input_lastname"
         android:textColor="@color/white"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/editTextTextInputLastName"
+        app:layout_constraintBottom_toTopOf="@+id/repeatPasswordField"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.263"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
-        android:id="@+id/imageViewAddPhoto"
+        android:id="@+id/addPhotoButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -96,7 +96,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.509"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextInputLastName" />
+        app:layout_constraintTop_toBottomOf="@+id/repeatPasswordField" />
 
     <TextView
         android:id="@+id/TextViewNameOfFamily"
