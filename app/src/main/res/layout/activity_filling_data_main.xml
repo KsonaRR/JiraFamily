@@ -8,22 +8,6 @@
     android:background="@color/background">
 
 
-    <Button
-        android:id="@+id/logButton"
-        android:layout_width="256sp"
-        android:layout_height="42sp"
-        android:layout_marginTop="52dp"
-        android:backgroundTint="@color/yellow"
-        android:fontFamily="@font/poppins_bold"
-        android:text="@string/button_next"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        app:cornerRadius="10sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.492"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextInputNameOfFamily" />
-
     <TextView
         android:id="@+id/textViewName"
         android:layout_width="wrap_content"
@@ -34,7 +18,7 @@
         android:text="@string/input_name"
         android:textColor="@color/white"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/passwordField"
+        app:layout_constraintBottom_toTopOf="@+id/inputName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -42,54 +26,27 @@
         android:id="@+id/textViewLastName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
         android:fontFamily="@font/poppins_bold"
         android:text="@string/input_lastname"
         android:textColor="@color/white"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/repeatPasswordField"
+        app:layout_constraintBottom_toTopOf="@+id/inputLastName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.263"
+        app:layout_constraintHorizontal_bias="0.238"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <EditText
-        android:id="@+id/repeatPasswordField"
-        android:layout_width="256sp"
-        android:layout_height="42sp"
-        android:layout_marginTop="76dp"
-        android:background="@drawable/rounded_inputtext"
-        android:ems="10"
-        android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordField" />
-
-    <EditText
-        android:id="@+id/passwordField"
-        android:layout_width="256dp"
-        android:layout_height="42dp"
-        android:layout_marginTop="56dp"
-        android:background="@drawable/rounded_inputtext"
-        android:ems="10"
-        android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addPhotoButton" />
 
     <EditText
         android:id="@+id/editTextInputNameOfFamily"
         android:layout_width="256sp"
         android:layout_height="42sp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="60dp"
         android:background="@drawable/rounded_inputtext"
         android:ems="10"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/repeatPasswordField" />
+        app:layout_constraintTop_toBottomOf="@+id/inputLastName" />
 
     <TextView
         android:id="@+id/TextViewNameOfFamily"
@@ -113,5 +70,47 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/add" />
+
+    <EditText
+        android:id="@+id/inputLastName"
+        android:layout_width="256sp"
+        android:layout_height="42sp"
+        android:layout_marginTop="72dp"
+        android:background="@drawable/rounded_inputtext"
+        android:ems="10"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inputName" />
+
+    <EditText
+        android:id="@+id/inputName"
+        android:layout_width="256dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="56dp"
+        android:background="@drawable/rounded_inputtext"
+        android:ems="10"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addPhotoButton"/>
+
+    <Button
+        android:id="@+id/openProfileButton"
+        android:layout_width="256sp"
+        android:layout_height="42sp"
+        android:layout_marginTop="52dp"
+        android:backgroundTint="@color/yellow"
+        android:fontFamily="@font/poppins_bold"
+        android:text="@string/button_next"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:cornerRadius="10sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextInputNameOfFamily" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/rounded_layout_with_border"
+    android:padding="16dp">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Выберите период"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <CheckBox
+        android:id="@+id/tasksForTheWeek"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:buttonTint="@color/yellow"
+        android:checked="false"
+        android:text="За неделю"
+        android:textColor="@android:color/white"
+        android:textColorHint="#FFEB3B"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <CheckBox
+        android:id="@+id/tasksForTheMonth"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:buttonTint="@color/yellow"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:text="За месяц" />
+
+    <CheckBox
+        android:id="@+id/tasksForTheYear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:buttonTint="@color/yellow"
+        android:textStyle="bold"
+        android:text="За год" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:layout_marginLeft="50sp"
+        android:layout_marginTop="10sp"
+        android:textStyle="bold"
+        android:text="Количество выполненных задач" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:layout_marginTop="20sp"
+        android:layout_marginBottom="30sp"
+        android:textStyle="bold"
+        android:text="" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"/>
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="378dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="10sp"
+        android:backgroundTint="@color/yellow"
+        android:text="Назад"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+
+</LinearLayout>

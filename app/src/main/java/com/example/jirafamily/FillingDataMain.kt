@@ -7,8 +7,13 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.net.Uri
 import android.os.Bundle
+import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import java.io.IOException
 import java.io.InputStream
 
@@ -16,17 +21,28 @@ import java.io.InputStream
 class FillingDataMain : AppCompatActivity() {
 
     private lateinit var profilePhoto:ImageView
+    private lateinit var inputName:EditText
+    private lateinit var inputLastName:EditText
+    private lateinit var openProfileButton: Button
     private val PICK_IMAGE_REQUEST = 1
     private val MAX_IMAGE_SIZE = 300
+    private lateinit var auth: FirebaseAuth
+    private lateinit var database: FirebaseDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_filling_data_main)
 
         profilePhoto = findViewById(R.id.addPhotoButton)
+        inputName = findViewById(R.id.inputName)
+        inputLastName = findViewById(R.id.inputLastName)
+        openProfileButton = findViewById(R.id.openProfileButton)
 
         profilePhoto.setOnClickListener {
             changeProfileImage()
+        }
+        openProfileButton.setOnClickListener {
+            saveUserProfile()
         }
     }
     private fun changeProfileImage() {
@@ -45,6 +61,7 @@ class FillingDataMain : AppCompatActivity() {
             profilePhoto.setImageBitmap(circularBitmap)
         }
     }
+
 
     private fun resizeImage(uri: Uri): Bitmap {
         try {
@@ -84,6 +101,27 @@ class FillingDataMain : AppCompatActivity() {
             canvas.drawBitmap(source, 0F, 0F, paint)
             source.recycle()
             return output
+        }
+    }
+    private fun saveUserProfile() {
+        val name = inputName.text.toString()
+        val lastName = inputLastName.text.toString()
+        val userId = auth.currentUser?.uid
+
+        if (userId != null) {
+            val userReference = database.getReference("users").child(userId)
+            val userData = mapOf(
+                "name" to name,
+                "lastName" to lastName,
+                "avatarUrl" to ""
+            )
+            userReference.setValue(userData)
+                .addOnSuccessListener {
+                    startActivity(Intent(this, ProfileActivity::class.java))
+                }
+                .addOnFailureListener {
+                    Toast.makeText(this, "Ошибка сохранения данных", Toast.LENGTH_SHORT).show()
+                }
         }
     }
 }

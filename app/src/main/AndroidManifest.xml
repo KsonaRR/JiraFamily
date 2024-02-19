@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
-
-
 
     <application
         android:allowBackup="true"
@@ -17,7 +17,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.JiraFamily"
         tools:targetApi="31">
-
+        <activity
+            android:name=".TasksActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ListUsersActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DeleteUserActivity"
+            android:exported="false" />
+        <activity
+            android:name=".NotificationAcitivity"
+            android:exported="false" />
+        <activity
+            android:name=".Message"
+            android:exported="false" />
         <activity
             android:name=".ProfileActivity"
             android:exported="false" />
