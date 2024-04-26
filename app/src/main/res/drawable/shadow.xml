@@ -1,0 +1,20 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Основной слой с фоновым цветом (желтый) -->
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="#FCA806" />
+        </shape>
+    </item>
+
+    <!-- Слой для свечения -->
+    <item android:right="10dp" android:left="10dp" android:top="10dp" android:bottom="10dp">
+        <shape android:shape="oval">
+            <gradient
+                android:startColor="#FCA806"
+                android:endColor="#00FCA806"
+                android:type="radial"/>
+        </shape>
+    </item>
+
+</layer-list>
