@@ -8,7 +8,7 @@
     tools:context=".ProfileActivity">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/profilePhotoImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -94,7 +94,7 @@
         android:textColor="#FFFFFF"
         android:textSize="15sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/imageView"
+        app:layout_constraintBottom_toTopOf="@+id/profilePhotoImageView"
         app:layout_constraintEnd_toEndOf="@+id/header"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />

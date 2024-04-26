@@ -30,7 +30,7 @@
             android:name=".NotificationAcitivity"
             android:exported="false" />
         <activity
-            android:name=".Message"
+            android:name=".MessageActivity"
             android:exported="false" />
         <activity
             android:name=".ProfileActivity"
