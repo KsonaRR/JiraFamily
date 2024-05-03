@@ -13,7 +13,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_loader)
 
         Handler().postDelayed({
-            val intent = Intent(this, NotificationAcitivity::class.java)
+            val intent = Intent(this, FirstPageActivity::class.java)
             startActivity(intent)
             finish()
         }, 3000)

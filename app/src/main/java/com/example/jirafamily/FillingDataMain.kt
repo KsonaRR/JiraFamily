@@ -14,20 +14,23 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import java.io.IOException
 import java.io.InputStream
 
 
 class FillingDataMain : AppCompatActivity() {
 
-    private lateinit var profilePhoto:ImageView
-    private lateinit var inputName:EditText
-    private lateinit var inputLastName:EditText
+    private lateinit var profilePhoto: ImageView
+    private lateinit var inputName: EditText
+    private lateinit var inputLastName: EditText
     private lateinit var openProfileButton: Button
+    private lateinit var nameOfFamily: EditText
     private val PICK_IMAGE_REQUEST = 1
     private val MAX_IMAGE_SIZE = 300
     private lateinit var auth: FirebaseAuth
-    private lateinit var database: FirebaseDatabase
+    private lateinit var imageUrl: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,14 +40,18 @@ class FillingDataMain : AppCompatActivity() {
         inputName = findViewById(R.id.inputName)
         inputLastName = findViewById(R.id.inputLastName)
         openProfileButton = findViewById(R.id.openProfileButton)
+        nameOfFamily = findViewById(R.id.editTextInputNameOfFamily)
+
+        auth = FirebaseAuth.getInstance()
 
         profilePhoto.setOnClickListener {
             changeProfileImage()
         }
         openProfileButton.setOnClickListener {
-            saveUserProfile()
+            saveUserProfile(imageUrl)
         }
     }
+
     private fun changeProfileImage() {
         val intent = Intent(Intent.ACTION_PICK)
         intent.type = "image/*"
@@ -59,6 +66,9 @@ class FillingDataMain : AppCompatActivity() {
             val resizedBitmap = resizeImage(imageUri)
             val circularBitmap = CircleCropTransformation().transform(resizedBitmap)
             profilePhoto.setImageBitmap(circularBitmap)
+
+
+            imageUrl = imageUri.toString()
         }
     }
 
@@ -85,8 +95,8 @@ class FillingDataMain : AppCompatActivity() {
             return resizedBitmap ?: throw IllegalArgumentException("Ошибка загрузки изображения")
         } catch (e: IOException) {
             e.printStackTrace()
+            throw IllegalArgumentException("Ошибка загрузки изображения")
         }
-        throw IllegalArgumentException("Ошибка загрузки изображения")
     }
 
     inner class CircleCropTransformation {
@@ -103,19 +113,24 @@ class FillingDataMain : AppCompatActivity() {
             return output
         }
     }
-    private fun saveUserProfile() {
+
+
+    private fun saveUserProfile(imageUrl: String) {
         val name = inputName.text.toString()
         val lastName = inputLastName.text.toString()
+        val familyName = nameOfFamily.text.toString()
         val userId = auth.currentUser?.uid
 
         if (userId != null) {
-            val userReference = database.getReference("users").child(userId)
-            val userData = mapOf(
+            val db = FirebaseFirestore.getInstance()
+            val userRef = db.collection("users").document(userId)
+            val userData = hashMapOf(
                 "name" to name,
                 "lastName" to lastName,
-                "avatarUrl" to ""
+                "familyName" to familyName,
+                "avatarUrl" to imageUrl // Добавляем URI изображения
             )
-            userReference.setValue(userData)
+            userRef.set(userData)
                 .addOnSuccessListener {
                     startActivity(Intent(this, ProfileActivity::class.java))
                 }
@@ -124,4 +139,6 @@ class FillingDataMain : AppCompatActivity() {
                 }
         }
     }
+
+
 }

@@ -20,6 +20,7 @@ class FirstPageActivity : AppCompatActivity() {
         var registrationButton:Button = findViewById(R.id.RegistrationButton)
         var tokenButton:Button = findViewById(R.id.TokenButton)
 
+
         loginButton.setOnClickListener(View.OnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
         })

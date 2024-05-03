@@ -1,5 +1,5 @@
 [versions]
-agp = "8.3.0-alpha14"
+agp = "8.3.0-alpha06"
 blurview = "1.6.6"
 kotlin = "1.8.21"
 core-ktx = "1.10.1"
@@ -12,6 +12,8 @@ constraintlayout = "2.1.4"
 play-services-fido = "20.1.0"
 ui-graphics-android = "1.6.0"
 firebase-auth-ktx = "22.3.1"
+firebase-firestore-ktx = "24.11.1"
+firebase-storage-ktx = "20.3.0"
 
 [libraries]
 blurview = { module = "com.wonderkiln:blurview", version.ref = "blurview" }
@@ -25,6 +27,8 @@ constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayo
 play-services-fido = { group = "com.google.android.gms", name = "play-services-fido", version.ref = "play-services-fido" }
 androidx-ui-graphics-android = { group = "androidx.compose.ui", name = "ui-graphics-android", version.ref = "ui-graphics-android" }
 firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebase-auth-ktx" }
+firebase-firestore-ktx = { group = "com.google.firebase", name = "firebase-firestore-ktx", version.ref = "firebase-firestore-ktx" }
+firebase-storage-ktx = { group = "com.google.firebase", name = "firebase-storage-ktx", version.ref = "firebase-storage-ktx" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

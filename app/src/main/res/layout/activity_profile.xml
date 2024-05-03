@@ -19,7 +19,7 @@
     <View
         android:id="@+id/basemant"
         android:layout_width="wrap_content"
-        android:layout_height="430dp"
+        android:layout_height="400dp"
         android:layout_marginBottom="52dp"
         android:background="@drawable/basemant_border"
         android:textAlignment="textEnd"
@@ -125,7 +125,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Имя"
@@ -150,6 +150,7 @@
         app:layout_constraintStart_toEndOf="@+id/view" />
 
     <TextView
+        android:id="@+id/lastName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Фамилия"

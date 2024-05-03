@@ -57,6 +57,8 @@ dependencies {
     implementation("com.google.firebase:firebase-auth")
     implementation(libs.constraintlayout)
     implementation(libs.firebase.auth.ktx)
+    implementation(libs.firebase.firestore.ktx)
+    implementation(libs.firebase.storage.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
