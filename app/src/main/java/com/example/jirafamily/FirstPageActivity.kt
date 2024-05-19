@@ -1,36 +1,39 @@
 package com.example.jirafamily
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
+import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class FirstPageActivity : AppCompatActivity() {
+    private lateinit var auth: FirebaseAuth
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_first_page)
 
-        var loginButton:Button = findViewById(R.id.LoginButton)
-        var registrationButton:Button = findViewById(R.id.RegistrationButton)
-        var tokenButton:Button = findViewById(R.id.TokenButton)
+        auth = FirebaseAuth.getInstance()
 
+        val loginButton: Button = findViewById(R.id.LoginButton)
+        val registrationButton: Button = findViewById(R.id.RegistrationButton)
+        val tokenButton: Button = findViewById(R.id.TokenButton)
 
-        loginButton.setOnClickListener(View.OnClickListener {
+        loginButton.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
-        })
+        }
 
-        registrationButton.setOnClickListener(View.OnClickListener {
+        registrationButton.setOnClickListener {
             startActivity(Intent(this, RegistrationActivity::class.java))
-        })
+        }
 
         tokenButton.setOnClickListener {
-            showTokenInputDialog()
+//            showTokenInputDialog()
         }
     }
 
@@ -47,11 +50,36 @@ class FirstPageActivity : AppCompatActivity() {
         dialog.show()
 
         btnContinue.setOnClickListener {
-            val enteredToken = editTextToken.text.toString()
+            val enteredToken = editTextToken.text.toString().trim()
 
-            // TODO: Добавить обработку введенного токена
-
-            dialog.dismiss()
+            if (enteredToken.isNotEmpty()) {
+                checkTokenAndProceed(enteredToken)
+                dialog.dismiss()
+            } else {
+                Toast.makeText(this, "Введите токен", Toast.LENGTH_SHORT).show()
+            }
         }
     }
+
+    private fun checkTokenAndProceed(token: String) {
+        val db = FirebaseFirestore.getInstance()
+        val adminsRef = db.collection("admins")
+
+        adminsRef.whereEqualTo("token", token).get()
+            .addOnSuccessListener { documents ->
+                if (documents != null && !documents.isEmpty) {
+                    val adminId = documents.documents[0].id
+                    val intent = Intent(this, FillingDataSecond::class.java)
+                    intent.putExtra("token", token)
+                    intent.putExtra("adminId", adminId)
+                    startActivity(intent)
+                } else {
+                    Toast.makeText(this, "Неверный токен", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Ошибка при проверке токена", Toast.LENGTH_SHORT).show()
+            }
+    }
+
 }

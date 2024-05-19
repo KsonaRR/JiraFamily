@@ -47,7 +47,7 @@ dependencies {
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
     implementation(libs.material)
-    implementation ("androidx.recyclerview:recyclerview:1.2.1")
+    implementation ("androidx.recyclerview:recyclerview:1.3.2")
     implementation ("com.github.javafaker:javafaker:1.0.2")
     implementation ("com.github.bumptech.glide:glide:4.14.2")
     implementation(libs.play.services.fido)

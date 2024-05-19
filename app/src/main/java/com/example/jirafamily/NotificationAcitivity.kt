@@ -1,12 +1,11 @@
 package com.example.jirafamily
 
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jirafamily.DTO.Message
-import com.example.jirafamily.adapters.MessageAdapter
+
 
 class NotificationAcitivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,7 +20,7 @@ class NotificationAcitivity : AppCompatActivity() {
         )
 
         val recyclerView: RecyclerView = findViewById(R.id.NotificationRecycleView)
-        recyclerView.adapter = MessageAdapter(messagesList)
+
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.setHasFixedSize(true)
     }

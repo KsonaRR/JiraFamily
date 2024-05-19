@@ -1,4 +1,6 @@
 package com.example.jirafamily
+
+
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
@@ -12,13 +14,14 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+
+import com.example.jirafamily.DTO.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.firestore.SetOptions
 import java.io.IOException
 import java.io.InputStream
-
 
 class FillingDataMain : AppCompatActivity() {
 
@@ -48,7 +51,50 @@ class FillingDataMain : AppCompatActivity() {
             changeProfileImage()
         }
         openProfileButton.setOnClickListener {
-            saveUserProfile(imageUrl)
+            // Получение значений из EditText
+            val name = inputName.text.toString().trim()
+            val lastName = inputLastName.text.toString().trim()
+            val nameOfFamily = nameOfFamily.text.toString().trim()
+
+            // Проверка, чтобы все поля были заполнены
+            if (name.isEmpty() || lastName.isEmpty() || nameOfFamily.isEmpty()) {
+                Toast.makeText(this, "Пожалуйста, заполните все поля", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // Проверка наличия ссылки на изображение аватара
+            if (imageUrl.isEmpty()) {
+                Toast.makeText(this, "Пожалуйста, выберите изображение для аватара", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // Создание объекта пользователя
+            val user = User(
+                name = name,
+                lastName = lastName,
+                nameOfFamily = nameOfFamily,
+                avatar = imageUrl, // imageUrl - это ссылка на изображение профиля пользователя
+                email = auth.currentUser?.email ?: "", // Получение email текущего пользователя
+                id = auth.currentUser?.uid // Получение ID текущего пользователя
+            )
+
+            // Ссылка на базу данных Realtime Database
+            val database = FirebaseDatabase.getInstance().reference
+
+            // Добавление нового пользователя в базу данных
+            val userId = auth.currentUser?.uid
+            if (userId != null) {
+                database.child("users").child(userId).setValue(user)
+                    .addOnSuccessListener {
+                        // Успешное сохранение данных, переход на следующий экран
+                        startActivity(Intent(this, ProfileActivity::class.java))
+                        finish()
+                    }
+                    .addOnFailureListener { exception ->
+                        // Ошибка сохранения данных, вывод сообщения об ошибке
+                        Toast.makeText(this, "Ошибка сохранения данных: ${exception.message}", Toast.LENGTH_SHORT).show()
+                    }
+            }
         }
     }
 
@@ -67,11 +113,9 @@ class FillingDataMain : AppCompatActivity() {
             val circularBitmap = CircleCropTransformation().transform(resizedBitmap)
             profilePhoto.setImageBitmap(circularBitmap)
 
-
             imageUrl = imageUri.toString()
         }
     }
-
 
     private fun resizeImage(uri: Uri): Bitmap {
         try {
@@ -115,30 +159,7 @@ class FillingDataMain : AppCompatActivity() {
     }
 
 
-    private fun saveUserProfile(imageUrl: String) {
-        val name = inputName.text.toString()
-        val lastName = inputLastName.text.toString()
-        val familyName = nameOfFamily.text.toString()
-        val userId = auth.currentUser?.uid
 
-        if (userId != null) {
-            val db = FirebaseFirestore.getInstance()
-            val userRef = db.collection("users").document(userId)
-            val userData = hashMapOf(
-                "name" to name,
-                "lastName" to lastName,
-                "familyName" to familyName,
-                "avatarUrl" to imageUrl // Добавляем URI изображения
-            )
-            userRef.set(userData)
-                .addOnSuccessListener {
-                    startActivity(Intent(this, ProfileActivity::class.java))
-                }
-                .addOnFailureListener {
-                    Toast.makeText(this, "Ошибка сохранения данных", Toast.LENGTH_SHORT).show()
-                }
-        }
-    }
 
 
 }

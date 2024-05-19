@@ -9,8 +9,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.jirafamily.DTO.Message
 import com.example.jirafamily.R
 
-class MessageAdapter(private val messages: List<Message>) :
+class MessageAdapter(private val chats: List<Message>, private val listener: OnItemClickListener) :
     RecyclerView.Adapter<MessageAdapter.MessageViewHolder>() {
+
+    interface OnItemClickListener {
+        fun onItemClick(position: Int)
+    }
 
     class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val profilePhotoImageView: ImageView = itemView.findViewById(R.id.profilePhotoImageView)
@@ -26,13 +30,19 @@ class MessageAdapter(private val messages: List<Message>) :
     }
 
     override fun onBindViewHolder(holder: MessageViewHolder, position: Int) {
-        val currentItem = messages[position]
+        val currentItem = chats[position]
 
         holder.profilePhotoImageView.setImageResource(currentItem.profilePhoto)
         holder.nameTextView.text = currentItem.name
         holder.lastMessageTextView.text = currentItem.lastMessage
         holder.timeTextView.text = currentItem.time
+
+        holder.itemView.setOnClickListener {
+            listener.onItemClick(position)
+        }
     }
 
-    override fun getItemCount() = messages.size
+    override fun getItemCount() = chats.size
 }
+
+

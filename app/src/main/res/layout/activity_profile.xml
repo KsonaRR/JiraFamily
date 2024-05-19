@@ -11,6 +11,7 @@
         android:id="@+id/profilePhotoImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/header"
@@ -29,21 +30,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
 
-    <Button
-        android:id="@+id/LoginButton"
-        android:layout_width="0dp"
-        android:layout_height="44dp"
-        android:layout_marginTop="28dp"
-        android:backgroundTint="@color/yellow"
-        android:text="@string/show_family"
-        android:textAlignment="gravity"
-        android:textColor="#000000"
-        android:textSize="18sp"
-        app:cornerRadius="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/basemant" />
+
 
     <Button
         android:id="@+id/exitButton"
@@ -119,7 +106,7 @@
         android:layout_width="160dp"
         android:layout_height="36dp"
         android:layout_marginStart="30dp"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="10dp"
         android:background="@drawable/rounded_yellow_view"
         app:layout_constraintBottom_toTopOf="@+id/basemant"
         app:layout_constraintStart_toStartOf="parent" />
@@ -142,7 +129,7 @@
         android:layout_width="160dp"
         android:layout_height="36dp"
         android:layout_marginStart="10dp"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="10dp"
         android:background="@drawable/rounded_yellow_view"
         app:layout_constraintBottom_toTopOf="@+id/basemant"
         app:layout_constraintEnd_toEndOf="parent"
@@ -259,7 +246,23 @@
         app:cornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/LoginButton" />
+        app:layout_constraintTop_toBottomOf="@+id/showUsersButton" />
+
+    <Button
+        android:id="@+id/showUsersButton"
+        android:layout_width="0dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="28dp"
+        android:backgroundTint="@color/yellow"
+        android:text="@string/show_family"
+        android:textAlignment="gravity"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        app:cornerRadius="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/basemant" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

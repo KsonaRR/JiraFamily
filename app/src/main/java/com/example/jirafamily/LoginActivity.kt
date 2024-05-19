@@ -1,5 +1,6 @@
 package com.example.jirafamily
 
+
 import android.content.ContentValues.TAG
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -8,6 +9,7 @@ import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+
 import com.example.jirafamily.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -29,19 +31,33 @@ class LoginActivity : AppCompatActivity() {
         auth = Firebase.auth
 
         button.setOnClickListener {
-            logInUser(email.text.toString().trim(), password.text.toString().trim())
+            // Получение введенного email и пароля
+            val userEmail = email.text.toString().trim()
+            val userPassword = password.text.toString().trim()
+
+            // Проверка наличия email и пароля
+            if (userEmail.isEmpty() || userPassword.isEmpty()) {
+                Toast.makeText(this, "Пожалуйста, заполните все поля", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // Вход в аккаунт с использованием введенного email и пароля
+            auth.signInWithEmailAndPassword(userEmail, userPassword)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        // Успешный вход, переход на главный экран
+                        startActivity(Intent(this, ProfileActivity::class.java))
+                        finish()
+                    } else {
+                        // Ошибка входа, вывод сообщения об ошибке
+                        Log.w(TAG, "signInWithEmail:failure", task.exception)
+                        Toast.makeText(baseContext, "Ошибка входа: ${task.exception?.message}",
+                            Toast.LENGTH_SHORT).show()
+                    }
+                }
         }
+
     }
 
-    private fun logInUser(email:String, password:String){
-        auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    val user = auth.currentUser
-                    startActivity(Intent(this, ProfileActivity::class.java))
-                } else {
-                    Toast.makeText(this, "Неверные данные", Toast.LENGTH_SHORT).show()
-                }
-            }
-    }
+
 }

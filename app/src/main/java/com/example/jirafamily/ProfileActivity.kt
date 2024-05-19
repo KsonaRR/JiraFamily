@@ -1,39 +1,42 @@
 package com.example.jirafamily
 
-import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Canvas
-import android.graphics.Paint
-import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
-import com.example.jirafamily.FillingDataMain.CircleCropTransformation
+import com.example.jirafamily.DTO.User
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
-import java.io.IOException
-import java.io.InputStream
 
 class ProfileActivity : AppCompatActivity() {
 
     private lateinit var callingDialogButton: Button
     private lateinit var completedTasks: Button
-    private lateinit var name:TextView
-    private lateinit var lastName:TextView
-    private lateinit var nameOfFamilyLogo:TextView
-    private lateinit var avatarOfUser:ImageView
-    private lateinit var notificationButton:ImageView
-    private lateinit var messageButton:ImageView
-    private lateinit var tasksButton:ImageView
+    private lateinit var name: TextView
+    private lateinit var lastName: TextView
+    private lateinit var nameOfFamilyLogo: TextView
+    private lateinit var avatarOfUser: ImageView
+    private lateinit var notificationButton: ImageView
+    private lateinit var messageButton: ImageView
+    private lateinit var tasksButton: ImageView
+    private lateinit var showUsersButton: Button
+    private lateinit var databaseReference: DatabaseReference
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
@@ -45,7 +48,12 @@ class ProfileActivity : AppCompatActivity() {
         avatarOfUser = findViewById(R.id.profilePhotoImageView)
         notificationButton = findViewById(R.id.imageView5)
         messageButton = findViewById(R.id.imageView6)
+        showUsersButton = findViewById(R.id.showUsersButton)
         tasksButton = findViewById(R.id.imageView7)
+
+        showUsersButton.setOnClickListener {
+            startActivity(Intent(this, ListUsersActivity::class.java))
+        }
 
         notificationButton.setOnClickListener {
             startActivity(Intent(this, NotificationAcitivity::class.java))
@@ -62,41 +70,39 @@ class ProfileActivity : AppCompatActivity() {
         completedTasks.setOnClickListener {
             showNumbersTasks()
         }
+
         callingDialogButton.setOnClickListener {
             showLogOutDialog()
         }
-        loadUserDataFromFirestore()
+
+        showProfileDataFromDatabase()
+
     }
 
-    private fun loadUserDataFromFirestore() {
-        val userId = Firebase.auth.currentUser?.uid
-        if (userId != null) {
-            val db = FirebaseFirestore.getInstance()
-            val userRef = db.collection("users").document(userId)
 
-            userRef.get()
-                .addOnSuccessListener { document ->
-                    if (document.exists()) {
-                        val userData = document.data
-                        if (userData != null) {
-                            // Обновление представлений данными из Firestore
-                            name.text = userData["name"].toString()
-                            lastName.text = userData["lastName"].toString()
-                            nameOfFamilyLogo.text = userData["familyName"].toString()
-
-
-                            // Загрузка и отображение изображения пользователя
-                            val imageUrl = userData["avatarUrl"].toString()
-                            Glide.with(this@ProfileActivity)
-                                .load(imageUrl)
-                                .into(avatarOfUser)
-                        }
+    private fun showProfileDataFromDatabase() {
+        databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    val userProfile = snapshot.getValue(User::class.java)
+                    userProfile?.let {
+                        name.text = it.name
+                        lastName.text = it.lastName
+                        nameOfFamilyLogo.text = it.nameOfFamily
+                        Glide.with(this@ProfileActivity)
+                            .load(it.avatar)
+                            .into(avatarOfUser)
                     }
+                } else {
+                    Toast.makeText(this@ProfileActivity, "Данные профиля не найдены", Toast.LENGTH_SHORT).show()
                 }
-                .addOnFailureListener { exception ->
-                    exception.printStackTrace()
-                }
-        }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("ProfileActivity", "Ошибка при загрузке данных: ${error.message}")
+                Toast.makeText(this@ProfileActivity, "Ошибка при загрузке данных профиля", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
 
@@ -107,19 +113,20 @@ class ProfileActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun showNumbersTasks(){
-            val builder = AlertDialog.Builder(this)
-            val inflater = LayoutInflater.from(this)
-            val dialogView = inflater.inflate(R.layout.dialog_number_of_tasks, null)
-            builder.setView(dialogView)
+    private fun showNumbersTasks() {
+        val builder = AlertDialog.Builder(this)
+        val inflater = LayoutInflater.from(this)
+        val dialogView = inflater.inflate(R.layout.dialog_number_of_tasks, null)
+        builder.setView(dialogView)
 
-            val tasksForTheWeek = dialogView.findViewById<CheckBox>(R.id.tasksForTheWeek)
-            val tasksForTheMonth = dialogView.findViewById<CheckBox>(R.id.tasksForTheMonth)
-            val tasksForTheYear = dialogView.findViewById<CheckBox>(R.id.tasksForTheYear)
+        val tasksForTheWeek = dialogView.findViewById<CheckBox>(R.id.tasksForTheWeek)
+        val tasksForTheMonth = dialogView.findViewById<CheckBox>(R.id.tasksForTheMonth)
+        val tasksForTheYear = dialogView.findViewById<CheckBox>(R.id.tasksForTheYear)
 
-            val dialog = builder.create()
-            dialog.show()
+        val dialog = builder.create()
+        dialog.show()
     }
+
     private fun showLogOutDialog() {
         val builder = AlertDialog.Builder(this)
         val inflater = LayoutInflater.from(this)
@@ -137,7 +144,6 @@ class ProfileActivity : AppCompatActivity() {
             dialog.dismiss()
         }
         returnButton.setOnClickListener {
-            startActivity(Intent(this, ProfileActivity::class.java))
             dialog.dismiss()
         }
     }

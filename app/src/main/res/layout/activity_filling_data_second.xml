@@ -8,10 +8,10 @@
     tools:context=".FillingDataSecond">
 
     <Button
-        android:id="@+id/logButton"
+        android:id="@+id/saveButton"
         android:layout_width="256sp"
         android:layout_height="42sp"
-        android:layout_marginTop="162dp"
+        android:layout_marginTop="48dp"
         android:backgroundTint="@color/yellow"
         android:fontFamily="@font/poppins_bold"
         android:text="@string/button_next"
@@ -19,47 +19,49 @@
         android:textSize="18sp"
         app:cornerRadius="10sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.509"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/repeatPasswordField" />
+        app:layout_constraintTop_toBottomOf="@+id/userLastName3" />
+
 
     <EditText
-        android:id="@+id/passwordField"
+        android:id="@+id/userName3"
         android:layout_width="256dp"
         android:layout_height="42dp"
+        android:layout_marginTop="96dp"
         android:background="@drawable/rounded_inputtext"
         android:ems="10"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="347dp" />
+        app:layout_constraintTop_toBottomOf="@+id/addPhotoButton" />
 
     <TextView
         android:id="@+id/textViewName"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:fontFamily="@font/poppins_bold"
         android:text="@string/input_name"
         android:textColor="@color/white"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/passwordField"
+        app:layout_constraintBottom_toTopOf="@+id/userName3"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.229"
+        app:layout_constraintHorizontal_bias="0.208"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:id="@+id/repeatPasswordField"
+        android:id="@+id/userLastName3"
         android:layout_width="256sp"
         android:layout_height="42sp"
-        android:layout_marginTop="68dp"
+        android:layout_marginTop="56dp"
         android:background="@drawable/rounded_inputtext"
         android:ems="10"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordField" />
+        app:layout_constraintTop_toBottomOf="@+id/userName3" />
 
     <TextView
         android:id="@+id/textViewLastName"
@@ -69,9 +71,9 @@
         android:text="@string/input_lastname"
         android:textColor="@color/white"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/repeatPasswordField"
+        app:layout_constraintBottom_toTopOf="@+id/userLastName3"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.263"
+        app:layout_constraintHorizontal_bias="0.238"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
@@ -79,37 +81,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
+        android:layout_marginEnd="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.692"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/add" />
-
-    <EditText
-        android:id="@+id/editTextInputNameOfFamily"
-        android:layout_width="256sp"
-        android:layout_height="42sp"
-        android:layout_marginTop="60dp"
-        android:background="@drawable/rounded_inputtext"
-        android:ems="10"
-        android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.509"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/repeatPasswordField" />
-
-    <TextView
-        android:id="@+id/TextViewNameOfFamily"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins_bold"
-        android:text="@string/input_name_of_family"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/editTextInputNameOfFamily"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.332"
-        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
