@@ -1,6 +1,5 @@
 package com.example.jirafamily
 
-
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
@@ -14,12 +13,12 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-
-import com.example.jirafamily.DTO.User
+import com.example.jirafamily.DTO.Admin
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import java.io.IOException
 import java.io.InputStream
+import java.util.UUID
 
 class FillingDataMain : AppCompatActivity() {
 
@@ -66,33 +65,31 @@ class FillingDataMain : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val user = User(
+            // Генерация токена приглашения
+            val inviteToken = UUID.randomUUID().toString()
+
+            val admin = Admin(
                 name = name,
                 lastName = lastName,
                 nameOfFamily = nameOfFamily,
                 avatar = imageUrl, // imageUrl - это ссылка на изображение профиля пользователя
                 email = auth.currentUser?.email ?: "", // Получение email текущего пользователя
                 id = auth.currentUser?.uid, // Получение ID текущего пользователя
-//                avatarMockUpResource = null
+                inviteToken = inviteToken // добавление токена в Admin объект
             )
 
             // Ссылка на базу данных Realtime Database
             val database = FirebaseDatabase.getInstance().reference
 
             // Добавление нового пользователя в базу данных
-            val userId = auth.currentUser?.uid
-            if (userId != null) {
-                database.child("users").child(userId).setValue(user)
+            val adminId = auth.currentUser?.uid
+            if (adminId != null) {
+                database.child("admins").child(adminId).setValue(admin)
                     .addOnSuccessListener {
-
-                        val profileIntent = Intent(this, ProfileActivity::class.java)
-
-                        profileIntent.putExtra("USER_DATA", user)
-
+                        val profileIntent = Intent(this, ProfileAdminActivity::class.java)
+                        profileIntent.putExtra("ADMIN_DATA", admin)
                         profileIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-
                         startActivity(profileIntent)
-
                         finish()
                     }
                     .addOnFailureListener { exception ->
@@ -100,11 +97,6 @@ class FillingDataMain : AppCompatActivity() {
                         Toast.makeText(this, "Ошибка сохранения данных: ${exception.message}", Toast.LENGTH_SHORT).show()
                     }
             }
-            val profileIntent = Intent(this, ProfileActivity::class.java)
-            // Поместите данные пользователя в интент
-            profileIntent.putExtra("USER_DATA", user)
-            // Запуск активности профиля
-            startActivity(profileIntent)
         }
     }
 
@@ -167,9 +159,4 @@ class FillingDataMain : AppCompatActivity() {
             return output
         }
     }
-
-
-
-
-
 }

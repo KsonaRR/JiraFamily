@@ -7,6 +7,7 @@
     android:background="@color/background"
     tools:context=".FillingDataSecond">
 
+
     <Button
         android:id="@+id/saveButton"
         android:layout_width="256sp"
@@ -21,8 +22,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userLastName3" />
-
+        app:layout_constraintTop_toBottomOf="@+id/token" />
 
     <EditText
         android:id="@+id/userName3"
@@ -31,7 +31,7 @@
         android:layout_marginTop="96dp"
         android:background="@drawable/rounded_inputtext"
         android:ems="10"
-        android:inputType="textPassword"
+        android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
@@ -57,11 +57,24 @@
         android:layout_marginTop="56dp"
         android:background="@drawable/rounded_inputtext"
         android:ems="10"
-        android:inputType="textPassword"
+        android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userName3" />
+
+    <EditText
+        android:id="@+id/token"
+        android:layout_width="256sp"
+        android:layout_height="42sp"
+        android:layout_marginTop="44dp"
+        android:background="@drawable/rounded_inputtext"
+        android:ems="10"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userLastName3" />
 
     <TextView
         android:id="@+id/textViewLastName"
@@ -72,6 +85,19 @@
         android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/userLastName3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.238"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textToken"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_bold"
+        android:text="Токен"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/token"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.238"
         app:layout_constraintStart_toStartOf="parent" />

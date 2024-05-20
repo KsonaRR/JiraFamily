@@ -7,11 +7,10 @@ import java.io.Serializable
 data class User @JvmOverloads constructor(
     var name: String = "",
     var lastName: String = "",
-    var avatar: String = "" ,
+    var avatar: String = "",
     var nameOfFamily: String = "",
     var email: String = "",
     var id: String? = null,
-
-    ) : Serializable {
-
-}
+    var inviteToken: String = "", // Поле для токена
+    var adminId: String = "" // Поле для ID администратора, к которому привязан пользователь
+) : Serializable

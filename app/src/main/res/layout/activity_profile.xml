@@ -30,23 +30,21 @@
         app:layout_constraintStart_toStartOf="parent" />
 
 
-
-
     <Button
         android:id="@+id/exitButton"
         android:layout_width="0dp"
         android:layout_height="44dp"
-        android:layout_marginTop="20dp"
         android:backgroundTint="@color/yellow"
         android:text="@string/exit_account"
         android:textAlignment="gravity"
+        android:layout_marginTop="30dp"
         android:textColor="#000000"
         android:textSize="18sp"
         app:cornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/TokenButton" />
+        app:layout_constraintTop_toBottomOf="@+id/completedTasks" />
 
     <View
         android:id="@+id/header"
@@ -86,20 +84,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
-    <Button
-        android:id="@+id/TokenButton"
-        android:layout_width="0dp"
-        android:layout_height="44dp"
-        android:layout_marginTop="20dp"
-        android:backgroundTint="@color/yellow"
-        android:text="@string/edit_members"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        app:cornerRadius="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/completedTasks" />
+
 
     <View
         android:id="@+id/view"
@@ -238,31 +223,17 @@
         android:id="@+id/completedTasks"
         android:layout_width="0dp"
         android:layout_height="44dp"
-        android:layout_marginTop="24dp"
         android:backgroundTint="@color/yellow"
         android:text="@string/complete_tasks"
+        android:layout_marginTop="30dp"
         android:textColor="@color/black"
         android:textSize="18sp"
         app:cornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/showUsersButton" />
-
-    <Button
-        android:id="@+id/showUsersButton"
-        android:layout_width="0dp"
-        android:layout_height="44dp"
-        android:layout_marginTop="28dp"
-        android:backgroundTint="@color/yellow"
-        android:text="@string/show_family"
-        android:textAlignment="gravity"
-        android:textColor="#000000"
-        android:textSize="18sp"
-        app:cornerRadius="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/basemant" />
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,6 +8,8 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.jirafamily.DTO.Admin
 import com.example.jirafamily.DTO.Users
 import com.example.jirafamily.adapters.ListUsersAdapter
 import com.example.jirafamily.adapters.UserAdapter
@@ -64,6 +66,7 @@ class ListUsersActivity : AppCompatActivity(), UserAdapter.OnUserClickListener,
             }
         })
     }
+
 
     override fun onUserClick(position: Int) {
         // Получить выбранного пользователя из списка

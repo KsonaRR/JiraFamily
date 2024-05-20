@@ -33,53 +33,10 @@ class FirstPageActivity : AppCompatActivity() {
         }
 
         tokenButton.setOnClickListener {
-//            showTokenInputDialog()
+            startActivity(Intent(this, AuthAdminActivity::class.java))
         }
     }
 
-    private fun showTokenInputDialog() {
-        val builder = AlertDialog.Builder(this)
-        val inflater = LayoutInflater.from(this)
-        val dialogView = inflater.inflate(R.layout.dialog_input_token, null)
-        builder.setView(dialogView)
 
-        val editTextToken = dialogView.findViewById<EditText>(R.id.editTextToken)
-        val btnContinue = dialogView.findViewById<Button>(R.id.btnContinue)
-
-        val dialog = builder.create()
-        dialog.show()
-
-        btnContinue.setOnClickListener {
-            val enteredToken = editTextToken.text.toString().trim()
-
-            if (enteredToken.isNotEmpty()) {
-                checkTokenAndProceed(enteredToken)
-                dialog.dismiss()
-            } else {
-                Toast.makeText(this, "Введите токен", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    private fun checkTokenAndProceed(token: String) {
-        val db = FirebaseFirestore.getInstance()
-        val adminsRef = db.collection("admins")
-
-        adminsRef.whereEqualTo("token", token).get()
-            .addOnSuccessListener { documents ->
-                if (documents != null && !documents.isEmpty) {
-                    val adminId = documents.documents[0].id
-                    val intent = Intent(this, FillingDataSecond::class.java)
-                    intent.putExtra("token", token)
-                    intent.putExtra("adminId", adminId)
-                    startActivity(intent)
-                } else {
-                    Toast.makeText(this, "Неверный токен", Toast.LENGTH_SHORT).show()
-                }
-            }
-            .addOnFailureListener {
-                Toast.makeText(this, "Ошибка при проверке токена", Toast.LENGTH_SHORT).show()
-            }
-    }
 
 }

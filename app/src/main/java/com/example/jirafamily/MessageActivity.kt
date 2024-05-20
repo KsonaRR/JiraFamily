@@ -5,9 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.jirafamily.DTO.Message
 import com.example.jirafamily.DTO.User
-import com.example.jirafamily.DTO.Users
 import com.example.jirafamily.adapters.MessageAdapter
 import com.example.jirafamily.adapters.UserAdapter
 import com.google.firebase.database.ChildEventListener
@@ -15,7 +13,6 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.firestore.FirebaseFirestore
 
 
 class MessageActivity : AppCompatActivity(), MessageAdapter.OnItemClickListener {

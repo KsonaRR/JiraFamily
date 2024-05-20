@@ -1,6 +1,5 @@
 package com.example.jirafamily
 
-
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
@@ -14,9 +13,12 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-
+import com.example.jirafamily.DTO.User
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import java.io.IOException
 import java.io.InputStream
 
@@ -25,12 +27,12 @@ class FillingDataSecond : AppCompatActivity() {
     private lateinit var profilePhoto: ImageView
     private lateinit var inputName: EditText
     private lateinit var inputLastName: EditText
-    private lateinit var saveButton: Button
+    private lateinit var inputToken: EditText
+    private lateinit var openProfileButton: Button
     private val PICK_IMAGE_REQUEST = 1
     private val MAX_IMAGE_SIZE = 300
     private lateinit var auth: FirebaseAuth
     private lateinit var imageUrl: String
-    private lateinit var token: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,17 +41,78 @@ class FillingDataSecond : AppCompatActivity() {
         profilePhoto = findViewById(R.id.addPhotoButton)
         inputName = findViewById(R.id.userName3)
         inputLastName = findViewById(R.id.userLastName3)
-        saveButton = findViewById(R.id.saveButton)
+        openProfileButton = findViewById(R.id.saveButton)
+        inputToken = findViewById(R.id.token)
 
         auth = FirebaseAuth.getInstance()
-        token = intent.getStringExtra("token").toString()
 
         profilePhoto.setOnClickListener {
             changeProfileImage()
         }
+        openProfileButton.setOnClickListener {
+            // Получение значений из EditText
+            val name = inputName.text.toString().trim()
+            val lastName = inputLastName.text.toString().trim()
+            val inviteToken = inputToken.text.toString().trim()
 
-        saveButton.setOnClickListener {
-            saveUserProfile()
+            // Проверка, чтобы все поля были заполнены
+            if (name.isEmpty() || lastName.isEmpty() || inviteToken.isEmpty()) {
+                Toast.makeText(this, "Пожалуйста, заполните все поля", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // Проверка наличия ссылки на изображение аватара
+            if (imageUrl.isEmpty()) {
+                Toast.makeText(this, "Пожалуйста, выберите изображение для аватара", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val database = FirebaseDatabase.getInstance().reference
+
+            // Проверка существования токена и получение данных администратора
+            database.child("admins").orderByChild("inviteToken").equalTo(inviteToken)
+                .addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if (snapshot.exists()) {
+                            for (adminSnapshot in snapshot.children) {
+                                val adminId = adminSnapshot.key ?: ""
+
+                                val user = User(
+                                    name = name,
+                                    lastName = lastName,
+                                    nameOfFamily = adminSnapshot.child("nameOfFamily").value.toString(),
+                                    avatar = imageUrl,
+                                    email = auth.currentUser?.email ?: "",
+                                    id = auth.currentUser?.uid,
+                                    inviteToken = inviteToken,
+                                    adminId = adminId
+                                )
+
+                                // Добавление нового пользователя в базу данных
+                                val userId = auth.currentUser?.uid
+                                if (userId != null) {
+                                    database.child("users").child(userId).setValue(user)
+                                        .addOnSuccessListener {
+                                            val profileIntent = Intent(this@FillingDataSecond, ProfileActivity::class.java)
+                                            profileIntent.putExtra("USER_DATA", user)
+                                            profileIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                            startActivity(profileIntent)
+                                            finish()
+                                        }
+                                        .addOnFailureListener { exception ->
+                                            Toast.makeText(this@FillingDataSecond, "Ошибка сохранения данных: ${exception.message}", Toast.LENGTH_SHORT).show()
+                                        }
+                                }
+                            }
+                        } else {
+                            Toast.makeText(this@FillingDataSecond, "Неверный токен приглашения", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        Toast.makeText(this@FillingDataSecond, "Ошибка: ${error.message}", Toast.LENGTH_SHORT).show()
+                    }
+                })
         }
     }
 
@@ -112,34 +175,4 @@ class FillingDataSecond : AppCompatActivity() {
             return output
         }
     }
-
-    private fun saveUserProfile() {
-        val name = inputName.text.toString()
-        val lastName = inputLastName.text.toString()
-        val userId = FirebaseAuth.getInstance().currentUser?.uid
-        val adminId = intent.getStringExtra("adminId")
-
-        if (userId != null && adminId != null) {
-            val db = FirebaseFirestore.getInstance()
-            val userRef = db.collection("users").document(userId)
-            val userData = hashMapOf(
-                "name" to name,
-                "lastName" to lastName,
-                "avatarUrl" to imageUrl,
-                "adminId" to adminId
-            )
-            userRef.set(userData)
-                .addOnSuccessListener {
-                    startActivity(Intent(this, ProfileActivity::class.java))
-                }
-                .addOnFailureListener {
-                    Toast.makeText(this, "Ошибка сохранения данных", Toast.LENGTH_SHORT).show()
-                }
-        } else {
-            Toast.makeText(this, "Ошибка: не удалось получить идентификатор пользователя или администратора", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-
-
 }

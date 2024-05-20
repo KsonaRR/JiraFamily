@@ -48,7 +48,7 @@ class RegistrationActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     // Регистрация успешна, переход на следующий экран
-                    startActivity(Intent(this, FillingDataMain::class.java))
+                    startActivity(Intent(this, FillingDataSecond::class.java))
                     finish()
                 } else {
                     // Регистрация не удалась, вывод сообщения об ошибке

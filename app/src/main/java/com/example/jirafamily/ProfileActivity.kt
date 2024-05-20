@@ -9,7 +9,6 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
@@ -21,7 +20,6 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 
 class ProfileActivity : AppCompatActivity() {
@@ -35,7 +33,6 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var notificationButton: ImageView
     private lateinit var messageButton: ImageView
     private lateinit var tasksButton: ImageView
-    private lateinit var showUsersButton: Button
     private lateinit var databaseReference: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,12 +46,7 @@ class ProfileActivity : AppCompatActivity() {
         avatarOfUser = findViewById(R.id.profilePhotoImageView)
         notificationButton = findViewById(R.id.imageView5)
         messageButton = findViewById(R.id.imageView6)
-        showUsersButton = findViewById(R.id.showUsersButton)
         tasksButton = findViewById(R.id.imageView7)
-
-        showUsersButton.setOnClickListener {
-            startActivity(Intent(this, ListUsersActivity::class.java))
-        }
 
         notificationButton.setOnClickListener {
             startActivity(Intent(this, NotificationAcitivity::class.java))
