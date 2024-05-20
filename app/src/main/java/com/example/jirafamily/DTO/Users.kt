@@ -4,5 +4,5 @@ data class Users(
     var avatarUrl: String = "",
     val name: String = "",
     val lastName: String = "",
-    val userId: String = ""
+    val id: String = ""
 )

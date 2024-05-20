@@ -6,57 +6,84 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jirafamily.DTO.Message
+import com.example.jirafamily.DTO.User
+import com.example.jirafamily.DTO.Users
 import com.example.jirafamily.adapters.MessageAdapter
+import com.example.jirafamily.adapters.UserAdapter
+import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 
+
 class MessageActivity : AppCompatActivity(), MessageAdapter.OnItemClickListener {
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var messageAdapter: MessageAdapter
-    private var messageList = mutableListOf<Message>()
+    private lateinit var userRecyclerView: RecyclerView
+    private lateinit var userAdapter: UserAdapter
+    private var userList = ArrayList<User>()
+    private lateinit var usersDatabaseReference: DatabaseReference
+    private lateinit var usersChildEventListener: ChildEventListener
+    private lateinit var userLayoutManager: RecyclerView.LayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_message)
 
-        recyclerView = findViewById(R.id.MessageRecycleView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        messageAdapter = MessageAdapter(messageList, this) // Передаем текущий контекст и этот класс как слушатель
-        recyclerView.adapter = messageAdapter
+        userList = ArrayList()
 
-        // Получение данных админов из Firestore и заполнение списка сообщений
-        loadAdminsFromFirestore()
+        attackUserDatabaseReferenceListener()
+        buildRecycleView()
     }
 
-    private fun loadAdminsFromFirestore() {
-        val db = FirebaseFirestore.getInstance()
-        val adminsRef = db.collection("admins")
+    private fun buildRecycleView(){
+        userRecyclerView = findViewById(R.id.UserRecycleView)
+        userRecyclerView.setHasFixedSize(true)
+        userLayoutManager = LinearLayoutManager(this)
+        userAdapter = UserAdapter(userList)
 
-        // Загрузка данных админов из Firestore
-        adminsRef.get()
-            .addOnSuccessListener { documents ->
-                for (document in documents) {
-                    val profilePhoto = R.drawable.account_circle // Замените на изображение профиля из базы данных
-                    val name = document.getString("name") ?: "Unknown"
-                    val time = "00:00" // Время пока оставим по умолчанию
-                    val lastMessage = "123" // Пока оставим пустым
-                    val author = "Admin" // Предполагаем, что сообщение отправлено админом
+        userRecyclerView.layoutManager = userLayoutManager
+        userRecyclerView.adapter = userAdapter
 
-                    val message = Message(profilePhoto, name, lastMessage, time, author)
-                    messageList.add(message)
+    }
+
+    private fun attackUserDatabaseReferenceListener() {
+        usersDatabaseReference = FirebaseDatabase.getInstance().getReference().child("users")
+        if(usersChildEventListener == null){
+            usersDatabaseReference.addChildEventListener(object : ChildEventListener {
+                override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                    var user:User = snapshot.getValue(User::class.java)!!
+//                    user.avatar = R.drawable.account_circle.toString()
+                    userList.add(user)
+                    userAdapter.notifyDataSetChanged()
                 }
 
-                // Обновление RecyclerView после загрузки данных админов
-                messageAdapter.notifyDataSetChanged()
-            }
-            .addOnFailureListener { exception ->
-                // Обработка ошибки загрузки данных из Firestore
-                exception.printStackTrace()
-            }
+                override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+                    // Ваш код обработки изменения дочернего элемента
+                }
+
+                override fun onChildRemoved(snapshot: DataSnapshot) {
+                    // Ваш код обработки удаления дочернего элемента
+                }
+
+                override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+                    // Ваш код обработки перемещения дочернего элемента
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    // Ваш код обработки отмены
+                }
+            })
+            usersDatabaseReference.addChildEventListener(usersChildEventListener)
+        }
     }
+
 
     override fun onItemClick(position: Int) {
         val intent = Intent(this, ChatActivity::class.java)
         startActivity(intent)
     }
 }
+
+
 

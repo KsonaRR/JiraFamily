@@ -10,8 +10,12 @@ import com.bumptech.glide.Glide
 import com.example.jirafamily.DTO.Users
 import com.example.jirafamily.R
 
+
 class ListUsersAdapter(private val users: List<Users>) :
     RecyclerView.Adapter<ListUsersAdapter.UsersViewHolder>() {
+    interface OnUserClickListener {
+        fun onUserClick(position: Int)
+    }
 
     class UsersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val profilePhotoImageView: ImageView = itemView.findViewById(R.id.profilePhotoImageView)
@@ -19,17 +23,17 @@ class ListUsersAdapter(private val users: List<Users>) :
         val lastNameTextView: TextView = itemView.findViewById(R.id.lastNameTextView)
     }
 
+    private var listener: OnUserClickListener? = null
+
+    fun setOnUserClickListener(listener: OnUserClickListener) {
+        this.listener = listener
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UsersViewHolder {
         val itemView = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_listofusers, parent, false)
         return UsersViewHolder(itemView)
     }
-
-    fun updateUserAvatar(position: Int, avatarUrl: String) {
-        users[position].avatarUrl = avatarUrl
-        notifyItemChanged(position)
-    }
-
 
     override fun onBindViewHolder(holder: UsersViewHolder, position: Int) {
         val currentItem = users[position]
@@ -39,6 +43,11 @@ class ListUsersAdapter(private val users: List<Users>) :
             .load(currentItem.avatarUrl)
             .placeholder(R.drawable.account_circle)
             .into(holder.profilePhotoImageView)
+
+        // Установка обработчика кликов на элемент списка
+        holder.itemView.setOnClickListener {
+            listener?.onUserClick(position)
+        }
     }
 
     override fun getItemCount() = users.size

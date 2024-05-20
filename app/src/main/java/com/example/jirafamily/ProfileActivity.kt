@@ -1,5 +1,6 @@
 package com.example.jirafamily
 
+import TasksActivity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -60,7 +61,7 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         messageButton.setOnClickListener {
-            startActivity(Intent(this, MessageActivity::class.java))
+            startActivity(Intent(this, ListUsersActivity::class.java))
         }
 
         tasksButton.setOnClickListener {
@@ -74,36 +75,43 @@ class ProfileActivity : AppCompatActivity() {
         callingDialogButton.setOnClickListener {
             showLogOutDialog()
         }
-
-        showProfileDataFromDatabase()
+        loadUserDataFromFirebase()
 
     }
 
+    private fun loadUserDataFromFirebase() {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        val databaseReference = userId?.let {
+            FirebaseDatabase.getInstance().getReference("users").child(
+                it
+            )
+        }
 
-    private fun showProfileDataFromDatabase() {
-        databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
+        databaseReference?.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
-                    val userProfile = snapshot.getValue(User::class.java)
-                    userProfile?.let {
+                    val user = snapshot.getValue(User::class.java)
+                    user?.let {
+                        // Обновление полей макета данными пользователя
                         name.text = it.name
                         lastName.text = it.lastName
                         nameOfFamilyLogo.text = it.nameOfFamily
                         Glide.with(this@ProfileActivity)
                             .load(it.avatar)
                             .into(avatarOfUser)
+
                     }
-                } else {
-                    Toast.makeText(this@ProfileActivity, "Данные профиля не найдены", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Log.e("ProfileActivity", "Ошибка при загрузке данных: ${error.message}")
-                Toast.makeText(this@ProfileActivity, "Ошибка при загрузке данных профиля", Toast.LENGTH_SHORT).show()
+                Log.e("ProfileActivity", "Error loading user data: ${error.message}")
             }
         })
     }
+
+
+
 
 
 

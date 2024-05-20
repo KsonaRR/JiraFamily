@@ -23,7 +23,7 @@
 
         <Button
             android:id="@+id/approvalButton"
-            android:layout_width="188dp"
+            android:layout_width="140dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginRight="10sp"
@@ -35,11 +35,11 @@
 
         <Button
             android:id="@+id/returnButton"
-            android:layout_width="match_parent"
+            android:layout_width="140dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10sp"
             android:layout_marginTop="16dp"
             android:backgroundTint="@color/yellow"
-            android:layout_marginLeft="10sp"
             android:text="Назад"
             android:textColor="@color/black"
             android:textSize="16sp"

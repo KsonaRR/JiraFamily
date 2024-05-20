@@ -105,6 +105,7 @@
         android:text="@string/input_token"
         android:backgroundTint="@color/yellow"
         android:textSize="18sp"
+        android:visibility="invisible"
         android:textColor="@color/black"
         app:cornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"

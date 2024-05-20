@@ -129,7 +129,7 @@
         app:layout_constraintStart_toEndOf="@+id/imageView6" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/MessageRecycleView"
+        android:id="@+id/UserRecycleView"
         android:layout_width="410dp"
         android:layout_height="658dp"
         app:layout_constraintBottom_toTopOf="@+id/view3"

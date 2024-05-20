@@ -18,8 +18,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.jirafamily.DTO.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.SetOptions
 import java.io.IOException
 import java.io.InputStream
 
@@ -68,14 +66,14 @@ class FillingDataMain : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Создание объекта пользователя
             val user = User(
                 name = name,
                 lastName = lastName,
                 nameOfFamily = nameOfFamily,
                 avatar = imageUrl, // imageUrl - это ссылка на изображение профиля пользователя
                 email = auth.currentUser?.email ?: "", // Получение email текущего пользователя
-                id = auth.currentUser?.uid // Получение ID текущего пользователя
+                id = auth.currentUser?.uid, // Получение ID текущего пользователя
+//                avatarMockUpResource = null
             )
 
             // Ссылка на базу данных Realtime Database
@@ -86,8 +84,15 @@ class FillingDataMain : AppCompatActivity() {
             if (userId != null) {
                 database.child("users").child(userId).setValue(user)
                     .addOnSuccessListener {
-                        // Успешное сохранение данных, переход на следующий экран
-                        startActivity(Intent(this, ProfileActivity::class.java))
+
+                        val profileIntent = Intent(this, ProfileActivity::class.java)
+
+                        profileIntent.putExtra("USER_DATA", user)
+
+                        profileIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+                        startActivity(profileIntent)
+
                         finish()
                     }
                     .addOnFailureListener { exception ->
@@ -95,6 +100,11 @@ class FillingDataMain : AppCompatActivity() {
                         Toast.makeText(this, "Ошибка сохранения данных: ${exception.message}", Toast.LENGTH_SHORT).show()
                     }
             }
+            val profileIntent = Intent(this, ProfileActivity::class.java)
+            // Поместите данные пользователя в интент
+            profileIntent.putExtra("USER_DATA", user)
+            // Запуск активности профиля
+            startActivity(profileIntent)
         }
     }
 
