@@ -1,31 +1,21 @@
 package com.example.jirafamily
 
-import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.example.jirafamily.DTO.Admin
-import com.example.jirafamily.DTO.Users
+import com.example.jirafamily.DTO.UserItem
 import com.example.jirafamily.adapters.ListUsersAdapter
-import com.example.jirafamily.adapters.UserAdapter
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 
-class ListUsersActivity : AppCompatActivity(), UserAdapter.OnUserClickListener,
-    ListUsersAdapter.OnUserClickListener {
+class ListUsersActivity : AppCompatActivity(), ListUsersAdapter.OnUserClickListener {
 
     private lateinit var usersAdapter: ListUsersAdapter
     private lateinit var recyclerView: RecyclerView
-    private val usersList = mutableListOf<Users>()
+    private val usersList = mutableListOf<UserItem>()
     private lateinit var textLogo: TextView
     private lateinit var currentUserID: String
 
@@ -45,28 +35,52 @@ class ListUsersActivity : AppCompatActivity(), UserAdapter.OnUserClickListener,
 
         usersAdapter.setOnUserClickListener(this)
 
-        var databaseReference = FirebaseDatabase.getInstance().getReference("users")
+        val databaseReference = FirebaseDatabase.getInstance().reference
 
-        // Слушаем изменения в базе данных
-        databaseReference.addValueEventListener(object : ValueEventListener {
+        // Слушаем изменения в базе данных для пользователей
+        databaseReference.child("users").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                usersList.clear()
-                for (snapshot in dataSnapshot.children) {
-                    val user = snapshot.getValue(Users::class.java)
-                    // Проверяем, что пользователь не текущий пользователь
-                    if (user?.id != currentUserID) {
-                        user?.let { usersList.add(it) }
-                    }
-                }
-                usersAdapter.notifyDataSetChanged()
+                loadUsers(dataSnapshot)
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                Log.w(TAG, "loadPost:onCancelled", databaseError.toException())
+                // Обработка ошибок
+            }
+        })
+
+        // Слушаем изменения в базе данных для администраторов
+        databaseReference.child("admins").addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                loadAdmins(dataSnapshot)
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Обработка ошибок
             }
         })
     }
 
+    // Метод для загрузки пользователей из снимка данных
+    private fun loadUsers(dataSnapshot: DataSnapshot) {
+        for (snapshot in dataSnapshot.children) {
+            val user = snapshot.getValue(UserItem::class.java)
+            if (user?.id != currentUserID) {
+                user?.let { usersList.add(it) }
+            }
+        }
+        usersAdapter.notifyDataSetChanged()
+    }
+
+    // Метод для загрузки администраторов из снимка данных
+    private fun loadAdmins(dataSnapshot: DataSnapshot) {
+        for (snapshot in dataSnapshot.children) {
+            val admin = snapshot.getValue(UserItem::class.java)
+            if (admin?.id != currentUserID) {
+                admin?.let { usersList.add(it) }
+            }
+        }
+        usersAdapter.notifyDataSetChanged()
+    }
 
     override fun onUserClick(position: Int) {
         // Получить выбранного пользователя из списка
@@ -74,13 +88,9 @@ class ListUsersActivity : AppCompatActivity(), UserAdapter.OnUserClickListener,
 
         // Создать Intent для открытия ChatActivity и передать данные о пользователе
         val intent = Intent(this, ChatActivity::class.java)
-        intent.putExtra("recipientUserId", usersList.get(position).id)
-        intent.putExtra("userName", usersList.get(position).name)
+        intent.putExtra("recipientUserId", selectedUser.id)
+        intent.putExtra("userName", "${selectedUser.name} ${selectedUser.lastName}")
         intent.putExtra("userId", selectedUser.id)
         startActivity(intent)
-    }
-
-    companion object {
-        private const val TAG = "ListUsersActivity"
     }
 }

@@ -40,7 +40,6 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var recipientUserId: String
     private lateinit var storageRef: StorageReference
     private lateinit var userName: String
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
@@ -61,12 +60,13 @@ class ChatActivity : AppCompatActivity() {
             usersDatabaseReference.child(currentUserUid).child("name")
                 .get()
                 .addOnSuccessListener { dataSnapshot ->
-                    userName = dataSnapshot.value as? String ?: "Anonymous"
+                    userName = dataSnapshot.value as? String ?: "Admin"
                 }
                 .addOnFailureListener { exception ->
                     Log.e("ChatActivity", "Error getting user name", exception)
                 }
         }
+
 
         progressBar = findViewById(R.id.progressBar)
         sendImageButton = findViewById(R.id.sendPhotoButton)

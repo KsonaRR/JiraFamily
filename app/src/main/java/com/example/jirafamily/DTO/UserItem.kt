@@ -12,5 +12,6 @@ data class UserItem @JvmOverloads constructor(
     var nameOfFamily: String = "",
     var email: String = "",
     var inviteToken: String = "",
-    var adminId: String = ""
+    var adminId: String = "",
+    var isAdmin: Boolean = false
 ) : Serializable
