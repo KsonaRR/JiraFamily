@@ -52,6 +52,7 @@ dependencies {
     implementation ("com.github.bumptech.glide:glide:4.14.2")
     implementation(libs.play.services.fido)
     implementation(libs.androidx.ui.graphics.android)
+    implementation ("com.squareup.picasso:picasso:2.71828")
     implementation("com.google.firebase:firebase-storage")
     implementation(platform("com.google.firebase:firebase-bom:33.0.0"))
     implementation("com.google.firebase:firebase-database")
