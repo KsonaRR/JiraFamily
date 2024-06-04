@@ -6,6 +6,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jirafamily.DTO.Task
 import com.example.jirafamily.R
+import com.example.jirafamily.adapters.CircleTransformation
+import com.squareup.picasso.Picasso
 
 class TaskAdapter(private val tasks: ArrayList<Task>) : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
 
@@ -18,11 +20,26 @@ class TaskAdapter(private val tasks: ArrayList<Task>) : RecyclerView.Adapter<Tas
         val currentTask = tasks[position]
         holder.taskNameTextView.text = currentTask.title
         holder.importanceTextView.text = "Важность:"
+
         // Установка изображения приоритета
         holder.taskPriorityImageView.setImageResource(getPriorityImage(currentTask.priority!!))
 
         // Установка изображения аватарки задачи (если есть ссылка)
-        currentTask.avatarUrl?.let {
+        currentTask.avatarUrl?.let { url ->
+            if (url.isNotEmpty()) {
+                Picasso.get().load(url)
+                    .resize(40, 40) // Установка размера 40x40
+                    .centerCrop() // Обрезка изображения до соотношения сторон
+                    .placeholder(R.drawable.account_circle) // Дефолтное изображение
+                    .transform(CircleTransformation())
+                    .into(holder.taskAvatarImageView)
+            } else {
+                // Загрузка дефолтного изображения, если ссылка пуста
+                holder.taskAvatarImageView.setImageResource(R.drawable.account_circle)
+            }
+        } ?: run {
+            // Если ссылка null, загрузка дефолтного изображения
+            holder.taskAvatarImageView.setImageResource(R.drawable.account_circle)
         }
     }
 
@@ -39,7 +56,6 @@ class TaskAdapter(private val tasks: ArrayList<Task>) : RecyclerView.Adapter<Tas
         val importanceTextView: TextView = itemView.findViewById(R.id.importanceTextView)
         val taskPriorityImageView: ImageView = itemView.findViewById(R.id.taskPriorityImageView)
         val taskAvatarImageView: ImageView = itemView.findViewById(R.id.taskAvatarImageView)
-        // Добавьте остальные View, если нужно
     }
 
     // Функция для определения ресурса изображения приоритета по его значению

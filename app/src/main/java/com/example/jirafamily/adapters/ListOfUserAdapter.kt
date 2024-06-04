@@ -16,20 +16,15 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.jirafamily.DTO.UserItem
 import com.example.jirafamily.R
 import com.squareup.picasso.Picasso
-import com.squareup.picasso.Transformation
 
-class ListUsersAdapter(private val userList: List<UserItem>) :
-    RecyclerView.Adapter<ListUsersAdapter.UsersViewHolder>() {
+class ListOfUserAdapter(private val userList: List<UserItem>) :
+    RecyclerView.Adapter<ListOfUserAdapter.UsersViewHolder>() {
 
     interface OnUserClickListener {
         fun onUserClick(position: Int)
     }
 
     private var listener: OnUserClickListener? = null
-
-    fun setOnUserClickListener(listener: OnUserClickListener) {
-        this.listener = listener
-    }
 
     class UsersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val profilePhotoImageView: ImageView = itemView.findViewById(R.id.profilePhotoImageView)
@@ -62,4 +57,8 @@ class ListUsersAdapter(private val userList: List<UserItem>) :
     }
 
     override fun getItemCount() = userList.size
+
+    fun setOnUserClickListener(listener: OnUserClickListener) {
+        this.listener = listener
+    }
 }

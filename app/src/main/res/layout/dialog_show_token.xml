@@ -6,37 +6,47 @@
     android:background="@drawable/rounded_layout_with_border"
     android:padding="16dp">
 
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Введите токен"
+        android:text="Ваш токен"
         android:textColor="@android:color/white"
         android:textSize="18sp"
         android:textStyle="bold" />
 
-    <EditText
+    <TextView
         android:id="@+id/editTextToken"
         android:layout_width="match_parent"
         android:layout_height="35dp"
         android:layout_marginTop="8dp"
+        android:textColor="@color/white"
         android:background="@drawable/rounded_inputtext"
         android:inputType="text"
         android:textColorHint="@color/white"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:gravity="center"
+        android:layout_gravity="center" />
+
+    <Button
+        android:id="@+id/btnCopyToken"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Копировать токен"
+        android:textColor="@color/black"
+        android:backgroundTint="@color/yellow"
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
     <Button
         android:id="@+id/btnContinue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:textColor="@color/black"
-
-        android:backgroundTint="@color/yellow"
         android:text="Продолжить"
+        android:textColor="@color/black"
+        android:backgroundTint="@color/yellow"
         android:textSize="16sp"
         android:textStyle="bold" />
-
 </LinearLayout>
-

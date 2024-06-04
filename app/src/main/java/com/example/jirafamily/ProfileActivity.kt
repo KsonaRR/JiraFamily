@@ -6,20 +6,21 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.CheckBox
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.bumptech.glide.Glide
 import com.example.jirafamily.DTO.User
+import com.example.jirafamily.adapters.CircleTransformation
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.ktx.Firebase
+import com.squareup.picasso.Picasso
 
 class ProfileActivity : AppCompatActivity() {
 
@@ -32,6 +33,7 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var notificationButton: ImageView
     private lateinit var messageButton: ImageView
     private lateinit var tasksButton: ImageView
+    private lateinit var listOfUsers: Button
     private lateinit var databaseReference: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,15 +46,20 @@ class ProfileActivity : AppCompatActivity() {
         nameOfFamilyLogo = findViewById(R.id.TextLogo)
         avatarOfUser = findViewById(R.id.profilePhotoImageView)
         notificationButton = findViewById(R.id.imageView5)
+        listOfUsers = findViewById(R.id.showMessageButton)
         messageButton = findViewById(R.id.imageView6)
         tasksButton = findViewById(R.id.imageView7)
+
+        listOfUsers.setOnClickListener {
+            startActivity(Intent(this, ListForUsersActivity::class.java))
+        }
 
         notificationButton.setOnClickListener {
             startActivity(Intent(this, NotificationAcitivity::class.java))
         }
 
         messageButton.setOnClickListener {
-            startActivity(Intent(this, ListUsersActivity::class.java))
+            startActivity(Intent(this, ListForChatsActivity::class.java))
         }
 
         tasksButton.setOnClickListener {
@@ -63,19 +70,26 @@ class ProfileActivity : AppCompatActivity() {
             showNumbersTasks()
         }
 
+
         callingDialogButton.setOnClickListener {
             showLogOutDialog()
         }
-        loadUserDataFromFirebase()
 
+        name.setOnClickListener {
+            showEditProfileDialog()
+        }
+
+        lastName.setOnClickListener {
+            showEditProfileDialog()
+        }
+
+        loadUserDataFromFirebase()
     }
 
     private fun loadUserDataFromFirebase() {
         val userId = FirebaseAuth.getInstance().currentUser?.uid
         val databaseReference = userId?.let {
-            FirebaseDatabase.getInstance().getReference("users").child(
-                it
-            )
+            FirebaseDatabase.getInstance().getReference("users").child(it)
         }
 
         databaseReference?.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -87,10 +101,16 @@ class ProfileActivity : AppCompatActivity() {
                         name.text = it.name
                         lastName.text = it.lastName
                         nameOfFamilyLogo.text = it.nameOfFamily
-                        Glide.with(this@ProfileActivity)
-                            .load(it.avatar)
-                            .into(avatarOfUser)
 
+                        // Получаем ссылку на изображение из поля avatar текущего пользователя
+                        val imageUrl = it.avatar
+
+                        // Загружаем изображение с помощью Picasso
+                        Picasso.get().load(imageUrl)
+                            .resize(450, 450)
+                            .centerCrop()
+                            .transform(CircleTransformation())
+                            .into(avatarOfUser)
                     }
                 }
             }
@@ -104,10 +124,74 @@ class ProfileActivity : AppCompatActivity() {
 
 
 
+    companion object {
+        private const val PICK_IMAGE_REQUEST = 1
+    }
 
+    private fun showEditProfileDialog() {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        val databaseReference = FirebaseDatabase.getInstance().getReference("users").child(userId)
+
+        databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    val user = snapshot.getValue(User::class.java)
+                    user?.let {
+                        val dialogView = layoutInflater.inflate(R.layout.dialog_edit_profile, null)
+                        val editTextName = dialogView.findViewById<EditText>(R.id.editTextName)
+                        val editTextLastName = dialogView.findViewById<EditText>(R.id.editTextLastName)
+                        val btnSave = dialogView.findViewById<Button>(R.id.btnSave)
+                        val btnCancel = dialogView.findViewById<Button>(R.id.btnCancel)
+
+                        editTextName.setText(it.name)
+                        editTextLastName.setText(it.lastName)
+
+                        val dialog = AlertDialog.Builder(this@ProfileActivity)
+                            .setView(dialogView)
+                            .create()
+
+                        btnSave.setOnClickListener {
+                            val newName = editTextName.text.toString()
+                            val newLastName = editTextLastName.text.toString()
+
+                            if (newName.isNotEmpty() && newLastName.isNotEmpty()) {
+                                val updates = mapOf(
+                                    "name" to newName,
+                                    "lastName" to newLastName
+                                )
+
+                                databaseReference.updateChildren(updates).addOnCompleteListener { task ->
+                                    if (task.isSuccessful) {
+                                        Toast.makeText(this@ProfileActivity, "Профиль обновлен", Toast.LENGTH_SHORT).show()
+                                        name.text = newName
+                                        lastName.text = newLastName
+                                    } else {
+                                        Toast.makeText(this@ProfileActivity, "Ошибка обновления профиля", Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+                                dialog.dismiss()
+                            } else {
+                                Toast.makeText(this@ProfileActivity, "Поля не должны быть пустыми", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+
+                        btnCancel.setOnClickListener {
+                            dialog.dismiss()
+                        }
+
+                        dialog.show()
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("ProfileActivity", "Error loading user data: ${error.message}")
+            }
+        })
+    }
 
     private fun signOut() {
-        Firebase.auth.signOut()
+        FirebaseAuth.getInstance().signOut()
         startActivity(Intent(this, FirstPageActivity::class.java))
         finish()
     }

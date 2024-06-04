@@ -5,8 +5,9 @@ data class Task(
     val description: String = "",
     val avatarUrl: String? = null,
     val status: String = "",
-    val priority: Int?
+    val priority: Int?,
+    val nameOfFamily: String
 ) {
-    constructor() : this("", "", null, "", null)
+    constructor() : this("", "", null, "", null, "")
 }
 

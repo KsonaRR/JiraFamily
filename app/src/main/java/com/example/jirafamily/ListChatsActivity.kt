@@ -1,20 +1,18 @@
 package com.example.jirafamily
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jirafamily.DTO.UserItem
 import com.example.jirafamily.adapters.ListUsersAdapter
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 
-class ListUsersActivity : AppCompatActivity() {
+class ListChatsActivity : AppCompatActivity(), ListUsersAdapter.OnUserClickListener {
+
     private lateinit var usersAdapter: ListUsersAdapter
     private lateinit var recyclerView: RecyclerView
     private val usersList = mutableListOf<UserItem>()
@@ -28,6 +26,7 @@ class ListUsersActivity : AppCompatActivity() {
 
         recyclerView = findViewById(R.id.ListUsersRecycleView)
         usersAdapter = ListUsersAdapter(usersList)
+        usersAdapter.setOnUserClickListener(this)
         recyclerView.adapter = usersAdapter
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.setHasFixedSize(true)
@@ -46,8 +45,7 @@ class ListUsersActivity : AppCompatActivity() {
         // Загружаем данные текущего пользователя (администратора)
         val currentUserID = FirebaseAuth.getInstance().currentUser?.uid ?: ""
 
-        databaseReference.child("admins").child(currentUserID).addListenerForSingleValueEvent(object :
-            ValueEventListener {
+        databaseReference.child("admins").child(currentUserID).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val currentAdmin = snapshot.getValue(UserItem::class.java)
                 currentAdmin?.let {
@@ -59,11 +57,6 @@ class ListUsersActivity : AppCompatActivity() {
                                 val user = snapshot.getValue(UserItem::class.java)
                                 user?.let {
                                     usersList.add(it)
-                                    // Проверяем ссылку на изображение пользователя
-
-                                    val imageUrl = it.avatar
-                                    Toast.makeText(this@ListUsersActivity, "URL изображения: ${imageUrl.toString()}", Toast.LENGTH_LONG).show()
-
                                 }
                             }
                             // После загрузки пользователей, обновляем список
@@ -81,5 +74,14 @@ class ListUsersActivity : AppCompatActivity() {
                 // Обработка ошибок
             }
         })
+    }
+
+    override fun onUserClick(position: Int) {
+        val selectedUser = usersList[position]
+        val intent = Intent(this, ChatActivity::class.java)
+        intent.putExtra("recipientUserId", selectedUser.id)
+        intent.putExtra("userName", "${selectedUser.name} ${selectedUser.lastName}")
+        intent.putExtra("userId", selectedUser.id)
+        startActivity(intent)
     }
 }
