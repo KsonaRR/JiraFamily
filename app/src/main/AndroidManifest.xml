@@ -16,12 +16,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.JiraFamily"
+        tools:ignore="MissingClass"
         tools:targetApi="31">
+        <activity
+            android:name=".CompTaskActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ListTaskForUsersActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EditTaskActivity"
+            android:exported="false" />
         <activity
             android:name=".ListForUsersActivity"
             android:exported="false" />
         <activity android:name=".ListUsersActivity" />
-
+        <activity android:name=".ProfileActivity" />
         <activity
             android:name=".ListForChatsActivity"
             android:exported="false" />
@@ -69,9 +79,6 @@
             android:exported="false" />
         <activity
             android:name=".MessageActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ProfileActivity"
             android:exported="false" />
         <activity
             android:name=".FillingDataSecond"

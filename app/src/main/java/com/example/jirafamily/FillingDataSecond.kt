@@ -5,18 +5,20 @@ import android.content.Intent
 import android.media.ExifInterface
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
 import com.example.jirafamily.DTO.User
 import com.example.jirafamily.adapters.CircleTransformation
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.squareup.picasso.Picasso
+import java.util.*
 
 class FillingDataSecond : AppCompatActivity() {
 
@@ -25,12 +27,13 @@ class FillingDataSecond : AppCompatActivity() {
     private lateinit var inputLastName: EditText
     private lateinit var inputToken: EditText
     private lateinit var openProfileButton: Button
+    private lateinit var user: User
     private lateinit var auth: FirebaseAuth
-    private lateinit var imageUrl: String
+    private var imageUrl: String? = null
     private lateinit var storage: FirebaseStorage
     private lateinit var storageReference: StorageReference
     private val PICK_IMAGE_REQUEST = 1
-
+    private var imageUri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,7 +63,7 @@ class FillingDataSecond : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            if (imageUrl.isEmpty()) {
+            if (imageUri == null) {
                 Toast.makeText(this, "Пожалуйста, выберите изображение для аватара", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -74,28 +77,30 @@ class FillingDataSecond : AppCompatActivity() {
                         if (snapshot.exists()) {
                             for (adminSnapshot in snapshot.children) {
                                 val adminId = adminSnapshot.key ?: ""
-                                val user = User(
-                                    name = name,
-                                    lastName = lastName,
-                                    nameOfFamily = adminSnapshot.child("nameOfFamily").value.toString(),
-                                    avatar = imageUrl,
-                                    email = auth.currentUser?.email ?: "",
-                                    id = userId,
-                                    inviteToken = inviteToken,
-                                    adminId = adminId
-                                )
+                                uploadImageToStorage(imageUri!!) { imageUrl ->
+                                    user = User(
+                                        name = name,
+                                        lastName = lastName,
+                                        nameOfFamily = adminSnapshot.child("nameOfFamily").value.toString(),
+                                        avatar = imageUrl ?: "",
+                                        email = auth.currentUser?.email ?: "",
+                                        id = userId,
+                                        inviteToken = inviteToken,
+                                        adminId = adminId
+                                    )
 
-                                database.child("users").child(userId).setValue(user)
-                                    .addOnSuccessListener {
-                                        val profileIntent = Intent(this@FillingDataSecond, ProfileActivity::class.java)
-                                        profileIntent.putExtra("USER_DATA", user)
-                                        profileIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                        startActivity(profileIntent)
-                                        finish()
-                                    }
-                                    .addOnFailureListener { exception ->
-                                        Toast.makeText(this@FillingDataSecond, "Ошибка сохранения данных: ${exception.message}", Toast.LENGTH_SHORT).show()
-                                    }
+                                    database.child("users").child(userId).setValue(user)
+                                        .addOnSuccessListener {
+                                            val profileIntent = Intent(this@FillingDataSecond, ProfileActivity::class.java)
+                                            profileIntent.putExtra("USER_DATA", user)
+                                            profileIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                            startActivity(profileIntent)
+                                            finish()
+                                        }
+                                        .addOnFailureListener { exception ->
+                                            Toast.makeText(this@FillingDataSecond, "Ошибка сохранения данных: ${exception.message}", Toast.LENGTH_SHORT).show()
+                                        }
+                                }
                             }
                         } else {
                             Toast.makeText(this@FillingDataSecond, "Неверный токен приглашения", Toast.LENGTH_SHORT).show()
@@ -119,35 +124,29 @@ class FillingDataSecond : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
-            val imageUri: Uri = data.data!!
+            imageUri = data.data // Обновляем значение переменной класса imageUri
 
-            // Проверка и корректировка ориентации изображения
-            val inputStream = contentResolver.openInputStream(imageUri)
-            val exifInterface = ExifInterface(inputStream!!)
-            val rotation = exifInterface.getAttributeInt(
-                ExifInterface.TAG_ORIENTATION,
-                ExifInterface.ORIENTATION_UNDEFINED
-            )
-            val rotationInDegrees = when (rotation) {
-                ExifInterface.ORIENTATION_ROTATE_90 -> 90
-                ExifInterface.ORIENTATION_ROTATE_180 -> 180
-                ExifInterface.ORIENTATION_ROTATE_270 -> 270
-                else -> 0
-            }
+            // Выводим URI изображения в тост
+            Toast.makeText(this, "Image URI: $imageUri", Toast.LENGTH_SHORT).show()
 
-            // Загрузка изображения с помощью Picasso с учетом корректировки ориентации
-            Picasso.get()
+            // Загрузка изображения с помощью Glide
+            Glide.with(this)
                 .load(imageUri)
-                .rotate(rotationInDegrees.toFloat()) // Поворот изображения
-                .resize(PICASSO_SIZE, PICASSO_SIZE)
-                .centerCrop()
-                .transform(CircleTransformation())
+                .circleCrop()
                 .into(profilePhoto)
         }
     }
-    companion object {
-        private const val PICASSO_SIZE = 200
+
+    private fun uploadImageToStorage(imageUri: Uri, onSuccess: (imageUrl: String) -> Unit) {
+        val storageRef: StorageReference = storage.reference.child("images/${UUID.randomUUID()}")
+        storageRef.putFile(imageUri)
+            .addOnSuccessListener { taskSnapshot ->
+                storageRef.downloadUrl.addOnSuccessListener { uri ->
+                    onSuccess(uri.toString())
+                }
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(this, "Ошибка загрузки изображения: ${exception.message}", Toast.LENGTH_SHORT).show()
+            }
     }
-
 }
-

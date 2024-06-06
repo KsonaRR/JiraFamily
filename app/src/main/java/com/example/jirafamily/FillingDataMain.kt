@@ -72,7 +72,7 @@ class FillingDataMain : AppCompatActivity() {
             }
 
             // Генерация токена приглашения
-            val inviteToken = UUID.randomUUID().toString()
+            val inviteToken = UUID.randomUUID().toString().take(6)
 
             // Загрузка изображения в Firebase Storage и сохранение данных администратора
             uploadImageToStorage { imageUrl ->

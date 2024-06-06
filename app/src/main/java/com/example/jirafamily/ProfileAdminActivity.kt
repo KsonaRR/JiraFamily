@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Button
-import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
@@ -17,7 +16,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.example.jirafamily.DTO.Admin
-import com.example.jirafamily.adapters.CircleTransformation
+import com.example.jirafamily.DTO.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -32,12 +31,13 @@ class ProfileAdminActivity : AppCompatActivity() {
     private lateinit var lastName: TextView
     private lateinit var nameOfFamilyLogo: TextView
     private lateinit var avatarOfUser: ImageView
-    private lateinit var notificationButton: ImageView
-    private lateinit var messageButton: ImageView
-    private lateinit var tasksButton: ImageView
     private lateinit var showUsersButton: Button
     private lateinit var editUsers: Button
     private lateinit var showTokenButton: Button
+    private lateinit var notificationButton: ImageView
+    private lateinit var messageButton: ImageView
+    private lateinit var tasksButton: ImageView
+    private lateinit var profileButton: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +55,23 @@ class ProfileAdminActivity : AppCompatActivity() {
         messageButton = findViewById(R.id.imageView6)
         tasksButton = findViewById(R.id.imageView7)
         showUsersButton = findViewById(R.id.showUsersButton)
+        messageButton = findViewById(R.id.imageView6)
+        tasksButton = findViewById(R.id.imageView7)
+        notificationButton = findViewById(R.id.imageView5)
+        profileButton = findViewById(R.id.imageView4)
+
+        messageButton.setOnClickListener {
+            startActivity(Intent(this, ListChatsActivity::class.java))
+        }
+        notificationButton.setOnClickListener {
+            startActivity(Intent(this, NotificationAcitivity::class.java))
+        }
+        profileButton.setOnClickListener {
+            startActivity(Intent(this, ProfileAdminActivity::class.java))
+        }
+        tasksButton.setOnClickListener {
+            startActivity(Intent(this, TasksActivity::class.java))
+        }
 
         showTokenButton.setOnClickListener {
             showTokenDialog()
@@ -243,15 +260,42 @@ class ProfileAdminActivity : AppCompatActivity() {
     }
 
     private fun showNumbersTasks() {
+        val adminId = FirebaseAuth.getInstance().currentUser?.uid
+        val databaseReference = adminId?.let {
+            FirebaseDatabase.getInstance().getReference("tasks")
+        }
+
+        databaseReference?.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    var tasksCount = 0
+                    for (taskSnapshot in snapshot.children) {
+                        val task = taskSnapshot.getValue(Task::class.java)
+                        if (task?.nameOfFamily == nameOfFamilyLogo.text.toString() && task.status == 1) {
+                            tasksCount++
+                        }
+                    }
+                    showTasksCountDialog(tasksCount)
+                } else {
+                    // Данные о задачах не найдены
+                    showTasksCountDialog(0)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("ProfileAdminActivity", "Error loading tasks data: ${error.message}")
+                showTasksCountDialog(0)
+            }
+        })
+    }
+
+    private fun showTasksCountDialog(tasksCount: Int) {
         val builder = AlertDialog.Builder(this)
         val inflater = LayoutInflater.from(this)
         val dialogView = inflater.inflate(R.layout.dialog_number_of_tasks, null)
+        val textViewTasksCount = dialogView.findViewById<TextView>(R.id.textView6)
+        textViewTasksCount.text = tasksCount.toString()
         builder.setView(dialogView)
-
-        val tasksForTheWeek = dialogView.findViewById<CheckBox>(R.id.tasksForTheWeek)
-        val tasksForTheMonth = dialogView.findViewById<CheckBox>(R.id.tasksForTheMonth)
-        val tasksForTheYear = dialogView.findViewById<CheckBox>(R.id.tasksForTheYear)
-
         val dialog = builder.create()
         dialog.show()
     }

@@ -6,26 +6,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jirafamily.DTO.Task
 import com.example.jirafamily.R
-import com.example.jirafamily.TasksActivity
 import com.example.jirafamily.adapters.CircleTransformation
 import com.squareup.picasso.Picasso
 
-class TaskAdapter(val tasks: ArrayList<Task>, private val onTaskDeleteListener: TasksActivity) : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
-
-
-
-    interface OnTaskDeleteListener {
-        fun onTaskDelete(position: Int)
-    }
+class UserTaskAdapter(val tasks: ArrayList<Task>, private val onTaskClickListener: OnTaskClickListener) : RecyclerView.Adapter<UserTaskAdapter.TaskViewHolder>() {
 
     interface OnTaskClickListener {
         fun onTaskClick(task: Task)
-    }
-
-    private var onTaskClickListener: OnTaskClickListener? = null
-
-    fun setOnTaskClickListener(listener: OnTaskClickListener) {
-        onTaskClickListener = listener
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
@@ -61,7 +48,7 @@ class TaskAdapter(val tasks: ArrayList<Task>, private val onTaskDeleteListener: 
 
         // Обработка клика на элемент списка для удаления
         holder.itemView.setOnClickListener {
-            onTaskClickListener?.onTaskClick(currentTask)
+            onTaskClickListener.onTaskClick(currentTask)
         }
     }
 
@@ -71,6 +58,13 @@ class TaskAdapter(val tasks: ArrayList<Task>, private val onTaskDeleteListener: 
         tasks.clear()
         tasks.addAll(newTasks)
         notifyDataSetChanged()
+    }
+    fun removeTask(task: Task) {
+        val index = tasks.indexOf(task)
+        if (index != -1) {
+            tasks.removeAt(index)
+            notifyItemRemoved(index)
+        }
     }
 
     class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

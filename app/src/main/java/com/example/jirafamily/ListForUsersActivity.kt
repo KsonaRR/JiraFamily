@@ -1,7 +1,9 @@
 package com.example.jirafamily
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,6 +21,10 @@ class ListForUsersActivity : AppCompatActivity() {
     private val usersList = mutableListOf<UserItem>()
     private lateinit var textLogo: TextView
     private lateinit var currentUserID: String
+    private lateinit var notificationButton: ImageView
+    private lateinit var messageButton: ImageView
+    private lateinit var tasksButton: ImageView
+    private lateinit var profileButton: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +36,23 @@ class ListForUsersActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.setHasFixedSize(true)
         textLogo = findViewById(R.id.TextLogo)
+        messageButton = findViewById(R.id.imageView6)
+        tasksButton = findViewById(R.id.imageView7)
+        notificationButton = findViewById(R.id.imageView5)
+        profileButton = findViewById(R.id.imageView4)
+
+        messageButton.setOnClickListener {
+            startActivity(Intent(this, ListForChatsActivity::class.java))
+        }
+        notificationButton.setOnClickListener {
+            startActivity(Intent(this, NotificationAcitivity::class.java))
+        }
+        profileButton.setOnClickListener {
+            startActivity(Intent(this, ProfileActivity::class.java))
+        }
+        tasksButton.setOnClickListener {
+            startActivity(Intent(this, ListTaskForUsersActivity::class.java))
+        }
 
         val currentUser = FirebaseAuth.getInstance().currentUser
         currentUserID = currentUser?.uid ?: ""

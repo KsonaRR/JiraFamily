@@ -12,6 +12,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.example.jirafamily.DTO.Task
 import com.example.jirafamily.DTO.User
 import com.example.jirafamily.adapters.CircleTransformation
 import com.google.firebase.auth.FirebaseAuth
@@ -50,6 +51,7 @@ class ProfileActivity : AppCompatActivity() {
         messageButton = findViewById(R.id.imageView6)
         tasksButton = findViewById(R.id.imageView7)
 
+
         listOfUsers.setOnClickListener {
             startActivity(Intent(this, ListForUsersActivity::class.java))
         }
@@ -63,7 +65,7 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         tasksButton.setOnClickListener {
-            startActivity(Intent(this, TasksActivity::class.java))
+            startActivity(Intent(this, ListTaskForUsersActivity::class.java))
         }
 
         completedTasks.setOnClickListener {
@@ -121,12 +123,47 @@ class ProfileActivity : AppCompatActivity() {
         })
     }
 
+    private fun showNumbersTasks() {
+        val adminId = FirebaseAuth.getInstance().currentUser?.uid
+        val databaseReference = adminId?.let {
+            FirebaseDatabase.getInstance().getReference("tasks")
+        }
 
+        databaseReference?.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    var tasksCount = 0
+                    for (taskSnapshot in snapshot.children) {
+                        val task = taskSnapshot.getValue(Task::class.java)
+                        if (task?.nameOfFamily == nameOfFamilyLogo.text.toString() && task.status == 1) {
+                            tasksCount++
+                        }
+                    }
+                    showTasksCountDialog(tasksCount)
+                } else {
+                    // Данные о задачах не найдены
+                    showTasksCountDialog(0)
+                }
+            }
 
-
-    companion object {
-        private const val PICK_IMAGE_REQUEST = 1
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("ProfileAdminActivity", "Error loading tasks data: ${error.message}")
+                showTasksCountDialog(0)
+            }
+        })
     }
+
+    private fun showTasksCountDialog(tasksCount: Int) {
+        val builder = AlertDialog.Builder(this)
+        val inflater = LayoutInflater.from(this)
+        val dialogView = inflater.inflate(R.layout.dialog_number_of_tasks, null)
+        val textViewTasksCount = dialogView.findViewById<TextView>(R.id.textView6)
+        textViewTasksCount.text = tasksCount.toString()
+        builder.setView(dialogView)
+        val dialog = builder.create()
+        dialog.show()
+    }
+
 
     private fun showEditProfileDialog() {
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
@@ -196,19 +233,7 @@ class ProfileActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun showNumbersTasks() {
-        val builder = AlertDialog.Builder(this)
-        val inflater = LayoutInflater.from(this)
-        val dialogView = inflater.inflate(R.layout.dialog_number_of_tasks, null)
-        builder.setView(dialogView)
 
-        val tasksForTheWeek = dialogView.findViewById<CheckBox>(R.id.tasksForTheWeek)
-        val tasksForTheMonth = dialogView.findViewById<CheckBox>(R.id.tasksForTheMonth)
-        val tasksForTheYear = dialogView.findViewById<CheckBox>(R.id.tasksForTheYear)
-
-        val dialog = builder.create()
-        dialog.show()
-    }
 
     private fun showLogOutDialog() {
         val builder = AlertDialog.Builder(this)

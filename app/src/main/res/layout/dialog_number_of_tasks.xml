@@ -7,52 +7,13 @@
     android:padding="16dp">
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="Выберите период"
-        android:textColor="@android:color/white"
-        android:textSize="18sp"
-        android:textStyle="bold" />
-
-    <CheckBox
-        android:id="@+id/tasksForTheWeek"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:buttonTint="@color/yellow"
-        android:checked="false"
-        android:text="За неделю"
-        android:textColor="@android:color/white"
-        android:textSize="18sp"
-        android:textStyle="bold" />
-
-    <CheckBox
-        android:id="@+id/tasksForTheMonth"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
-        android:buttonTint="@color/yellow"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:text="За месяц" />
-
-    <CheckBox
-        android:id="@+id/tasksForTheYear"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
-        android:textSize="18sp"
-        android:buttonTint="@color/yellow"
-        android:textStyle="bold"
-        android:text="За год" />
-
-    <TextView
         android:id="@+id/textView5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@android:color/white"
         android:textSize="18sp"
         android:layout_marginTop="10dp"
+        android:gravity="center"
         android:textStyle="bold"
         android:text="Количество выполненных задач" />
 
@@ -62,6 +23,7 @@
         android:layout_height="wrap_content"
         android:textColor="@android:color/white"
         android:textSize="18sp"
+        android:gravity="center"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="30dp"
         android:textStyle="bold"
