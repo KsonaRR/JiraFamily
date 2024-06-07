@@ -126,7 +126,8 @@ class EditTaskActivity : AppCompatActivity() {
                     if (!imageUrl.isNullOrEmpty()) {
                         loadImageFromUrl(imageUrl)
                     } else {
-                        Log.d("EditTaskActivity", "No image URL found in task")
+                        // Если изображение не выбрано или не загружено, скрываем ImageView
+                        selectedImageView.visibility = View.GONE
                     }
                 }
             }
@@ -140,16 +141,21 @@ class EditTaskActivity : AppCompatActivity() {
     private fun loadImageFromUrl(imageUrl: String) {
         Log.d("EditTaskActivity", "Loading image from URL: $imageUrl")
 
-        val requestOptions = RequestOptions()
-            .fitCenter() // Центрировать изображение и сохранить пропорции
-            .override(500, 500) // Установить размер 500x500 пикселей
+        Picasso.get().load(imageUrl)
+            .fit() // Центрируем изображение и сохраняем пропорции
+            .error(R.drawable.account_circle) // Иконка спиннера в случае ошибки загрузки
+            .into(selectedImageView, object : com.squareup.picasso.Callback {
+                override fun onSuccess() {
+                    selectedImageView.visibility = View.VISIBLE
+                }
 
-        val imageView = findViewById<ImageView>(R.id.attachedFileName)
-        Glide.with(this)
-            .load(imageUrl) // imageUrl - ссылка на изображение в Firebase Storage
-            .apply(requestOptions) // Применить параметры загрузки
-            .into(imageView)
+                override fun onError(e: Exception?) {
+                    e?.printStackTrace()
+                    Toast.makeText(this@EditTaskActivity, "Ошибка при загрузке файла: ${e?.message}", Toast.LENGTH_SHORT).show()
+                }
+            })
     }
+
 
 
     private fun chooseImage() {
@@ -181,6 +187,7 @@ class EditTaskActivity : AppCompatActivity() {
         if (selectedImageUri != null) {
             uploadImageAndSaveTask(selectedImageUri!!)
         } else {
+            // Если изображение не выбрано или не загружено, imageUrl будет null
             saveTaskData(null)
         }
     }

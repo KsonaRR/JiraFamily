@@ -4,6 +4,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.request.RequestOptions
 import com.example.jirafamily.DTO.Task
 import com.example.jirafamily.R
 import com.example.jirafamily.TasksActivity
@@ -44,12 +48,18 @@ class TaskAdapter(val tasks: ArrayList<Task>, private val onTaskDeleteListener: 
         // Установка изображения аватарки задачи (если есть ссылка)
         currentTask.avatarUrl?.let { url ->
             if (url.isNotEmpty()) {
-                Picasso.get().load(url)
-                    .resize(40, 40) // Установка размера 40x40
-                    .centerCrop() // Обрезка изображения до соотношения сторон
-                    .placeholder(R.drawable.account_circle) // Дефолтное изображение
-                    .transform(CircleTransformation())
+                Glide.with(holder.itemView)
+                    .load(url)
+                    .apply(RequestOptions()
+                        .placeholder(R.drawable.account_circle)
+                        .error(R.drawable.account_circle)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .override(40, 40) // Установка размера 40x40
+                        .centerCrop() // Обрезка изображения до соотношения сторон
+                        .transform(CircleCrop()) // Преобразование изображения в круг
+                    )
                     .into(holder.taskAvatarImageView)
+
             } else {
                 // Загрузка дефолтного изображения, если ссылка пуста
                 holder.taskAvatarImageView.setImageResource(R.drawable.account_circle)

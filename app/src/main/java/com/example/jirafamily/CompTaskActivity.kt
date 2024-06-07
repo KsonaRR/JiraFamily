@@ -113,7 +113,8 @@ class CompTaskActivity : AppCompatActivity() {
                     if (!imageUrl.isNullOrEmpty()) {
                         loadImageFromUrl(imageUrl)
                     } else {
-                        Log.d("EditTaskActivity", "No image URL found in task")
+                        // Если изображение не выбрано или не загружено, скрываем ImageView
+                        selectedImageView.visibility = View.GONE
                     }
                 }
             }
@@ -124,6 +125,7 @@ class CompTaskActivity : AppCompatActivity() {
         })
     }
 
+
     private fun loadImageFromUrl(imageUrl: String) {
         Log.d("EditTaskActivity", "Loading image from URL: $imageUrl")
 
@@ -131,7 +133,8 @@ class CompTaskActivity : AppCompatActivity() {
             Glide.with(this)
                 .load(imageUrl)
                 .override(500, 500) // Устанавливаем размер 500x500
-                .centerCrop() // Центрируем изображение и обрезаем лишнее
+                .fitCenter() // Центрируем изображение и сохраняем пропорции
+                .error(R.drawable.account_circle) // Иконка спиннера в случае ошибки загрузки
                 .into(selectedImageView)
 
             selectedImageView.visibility = View.VISIBLE
@@ -140,6 +143,7 @@ class CompTaskActivity : AppCompatActivity() {
             Toast.makeText(this, "Ошибка при загрузке файла: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
+
 
     private fun completeTask() {
         val taskUpdate = mapOf(
